@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title id="ctitle">Count down</title>
+</head>
+
+<body onload="doStartClock();">
+
+    <h2 style="text-align: left;">Creekside Middle School, 2022-23</h2>
+    <h2 style="text-align: left;">6/7/8th-grade bell timer</h2>
+
+    <p id="timePar7" style="font-size:8em;font-family: 'Courier New', Courier, monospace;text-align: left; line-height: 20%">00:00:00
+    </p>
+	<h2 id="whatsitfor" style="text-align: left;font-size:4em;">waiting</h2>
+    <script>
+ // Oct 22 2022
+ // moved paragraph <p> and </p> from body three lines above 
+ // <p id="timePar6" style="font-size:8em;font-family: 'Courier New', Courier, monospace;text-align: left; line-height: 20%">00:00:00
+ //   </p>
+ // <h2 id="nextbelltime6" style="text-align: center;">counting down to next bell 00:00:00</h2>
+ // <h2 id="nextbelltime7" style="text-align: center;">counting down to next bell 00:00:00</h2>
+ // Latest  update Sep 29, 2022
+ // removed display of 6th grade bell schedule
+ // Javascript program designed and written by Patrick Cheung
+        // Jan 17, 2022, in Castro Valley, CA
+        document.body.style.backgroundImage = "url('https://dl.dropboxusercontent.com/s/tb5pqjwr8o0ku3j/background3.jpg')";
+
+        gradebell = 6;
+        BellArrayTemp = [];
+        BellArray = [];
+        BellArray6 = [];
+        BellArray7 = [];
+        Nowtime = [];
+        nextbelltemp = 0;  // index in BellArrayTemp
+        nextbell6 = 0;
+        nextbell7 = 0;
+        bellcount = 0; // number of bell in BellArray
+        bellday = 0;
+        bellhour = 0;
+        bellmin = 0;
+        bellsec = 0;
+
+        function doStartClock() {
+            
+            gradebell = 6;
+            MakeBellSchedule();
+            BelltoArray();  // return TempBellArray and bellcount
+            BellArray6 = BellArrayTemp;
+            bellcount6 = bellcount; // need not reset bellcount
+            BellArrayTemp = []; //reset TempBellArray
+            gradebell = 7;
+            MakeBellSchedule();
+            BelltoArray();  // return TempBellArray
+            BellArray7 = BellArrayTemp;
+            bellcount7 = bellcount;
+            setInterval(doClockTick, 1000);
+        }
+
+        function BelltoArray(){
+            all = bellstring.trim();
+            lines = all.split("\n");
+            bellcount = lines.length;   // number of bells, # of rows
+            for (let i=0; i<bellcount; ++i){
+                lines[i]=lines[i].trim();
+                tokens = lines[i].split(",");
+                switch(tokens[0]){
+                    case "MON":
+                        tokens[0]=1;
+                        break;
+                    case "TUE":
+                        tokens[0]=2;
+                        break; 
+                    case "WED":
+                        tokens[0]=3;
+                        break;
+                    case "THU":
+                        tokens[0]=4;
+                        break;
+                    case "FRI":
+                        tokens[0]=5;
+                        break;
+                    default:
+                        tokens[0]=6;
+                        break;   
+                }  // convert weekdays to numerals
+                
+                tokens[1] = parseInt(tokens[1]);
+                if (tokens[1] < 7){
+                    tokens[1]=parseInt(tokens[1])+12;
+
+                }  // converts to 24-hour, no class after 7 PM
+                tokens[2] = parseInt(tokens[2]);
+                let Secondsum =((tokens[0]*24 +tokens[1]) *60 +tokens[2]) *60;
+                BellArrayTemp.push([tokens[0], tokens[1], tokens[2], 0, Secondsum, tokens[3]]);
+            }
+        }
+        function doClockTick() {
+            currentDate = new Date();
+            hours = currentDate.getHours();
+            mins = currentDate.getMinutes();
+            secs = currentDate.getSeconds();
+            weekdays = currentDate.getDay();
+            // construct a 4 array
+            Nowtime = [weekdays, hours, mins, secs];
+            Secondsumnow = ((weekdays*24 + hours) * 60 + mins) * 60 + secs;
+            
+ // commented out 5 lines Oct 22 2022
+ //           BellArray = BellArray6;
+ //           bellcount = bellcount6;
+ //           nextbell6 = Findnextbell(Secondsumnow);  //uses BellArray6 data
+ //           nextbell = nextbell6;
+ //           doOneDelta(6);  //uses BellArray6 and nextbell6 data
+            BellArray = BellArray7;
+            bellcount = bellcount7;
+            nextbell7 = Findnextbell(Secondsumnow);  //uses BellArray7 data
+            nextbell = nextbell7;
+            doOneDelta(7);  // uses BellArray7 and nextbell7 data
+
+
+
+            
+
+           
+        }
+
+        function doOneDelta(newgrade){
+            bellday = BellArray[nextbell][0];
+            bellhour = BellArray[nextbell][1];
+            bellmin = BellArray[nextbell][2];
+            bellsec = BellArray[nextbell][3];
+
+            let borrowmin = 0;
+            let borrowhr = 0;
+            let borrowday = 0;
+            if (bellsec < secs){
+                borrowmin = 1;
+                var delsec = bellsec + 60 - secs;
+            } else {
+                var delsec = bellsec - secs;
+            }
+            if (bellmin - borrowmin < mins){
+                borrowhr = 1;
+                var delmin = bellmin - borrowmin + 60 - mins;
+                borrowmin = 0;
+            } else {
+                var delmin = bellmin - borrowmin - mins;
+            }
+            if (bellhour - borrowhr < hours){
+                borrowday = 1;
+                var delhr = bellhour - borrowhr + 24 - hours;
+                borrowhr = 0;
+            } else {
+                var delhr = bellhour - borrowhr - hours;
+            }
+            if (bellday - borrowday < weekdays){
+                var delday = bellday - borrowday + 7 - weekdays;
+                borrowday = 0;
+            } else {
+                var delday = bellday - borrowday - weekdays;
+            }
+
+            delhr = delday * 24 + delhr; // convert days remaining to hours
+
+            if (delmin < 10){
+                delmin = '0' + delmin;  // delmin converted to a string
+            }
+            if (delsec < 10){
+                delsec = '0' + delsec;  // delsec converted to a string
+            }
+            var timeString =delhr + ":" + delmin + ":" + delsec;
+				if (delhr === 0){
+				timeString =delmin + ":" + delsec;
+				}
+            var outputElement = document.getElementById("timePar"+newgrade);
+            outputElement.textContent = timeString;
+            if (bellmin < 10){
+                bellmin = '0' + bellmin;    // bellmin converted to a string
+            }
+
+var PurposeString = BellArray[nextbell][5];
+var OutputElement = document.getElementById("whatsitfor");
+OutputElement.textContent = PurposeString;
+
+ //           if (bellhour > 12){
+ //               var displayhour = bellhour - 12;
+ //               var bellstring = "counting down to the next bell at " + displayhour + ":" + bellmin + " PM";
+ //           } else {
+ //               var displayhour = bellhour;
+ //               var bellstring = "counting down to the next bell at " + displayhour + ":" + bellmin + " AM";
+ //           }
+ //           var  outputElement = document.getElementById("nextbelltime"+newgrade);
+ //           outputElement.textContent = bellstring;
+ // display timer on tab title
+
+            var titlestring = delmin + ":" + delsec;
+            var  outputElement = document.getElementById("ctitle");
+            outputElement.textContent = titlestring;
+        }
+
+        function Findnextbell(Secsum) {
+            let nextfound = 0;
+            let i = 0;
+            while (nextfound == 0){
+                let delta = Secsum - BellArray[i][4];
+                if (delta <= 0) {
+                    nextfound = 1;}
+                    else {
+                        i++;
+                    }
+                if (i >= bellcount){
+                    nextfound = 1;  // stops the while loop
+                    i = 0;          // the time now is after 2:55 FRI and before Monday AM
+                }
+            }
+            return i;
+        }
+
+        function MakeBellSchedule(){
+            if (gradebell==6){
+                bellstring = `
+                MON,8,30,weekend
+                MON,9,20,1st period
+                MON,9,24,transition
+                MON,10,14,2nd period
+                MON,10,24,nutrition
+                MON,10,28,transition
+                MON,10,48,advisory
+                MON,11,38,3rd period
+                MON,11,42,transition
+                MON,12,32,4th period
+                MON,1,7,lunch
+                MON,1,11,transition
+                MON,2,1,5th period
+                MON,2,5,transition
+                MON,2,55,6th period
+                TUE,8,30,school ends
+                TUE,9,18,1st period
+                TUE,9,22,transition
+                TUE,10,10,2nd period
+                TUE,10,20,nutrition
+                TUE,10,24,transition
+                TUE,10,54,tutorial
+                TUE,10,58,transition
+                TUE,11,46,3rd period
+                TUE,11,50,transition
+                TUE,12,38,4th period
+                TUE,1,11,lunch
+                TUE,1,15,transition
+                TUE,2,3,5th period
+                TUE,2,7,transition
+                TUE,2,55,6th period
+                WED,9,30,school ends
+                WED,10,10,1st period
+                WED,10,14,transition
+                WED,10,54,2nd period
+                WED,11,4,nutrition
+                WED,11,8,transition
+                WED,11,28,advisory
+                WED,12,8,3rd period
+                WED,12,12,transition
+                WED,12,52,4th period
+                WED,1,27,lunch
+                WED,1,31,transition
+                WED,2,11,5th period
+                WED,2,15,transition
+                WED,2,55,6th period
+                THU,8,30,school ends
+                THU,9,18,1st period
+                THU,9,22,transition
+                THU,10,10,2nd period
+                THU,10,20,nutrition
+                THU,10,24,transition
+                THU,10,54,tutorial
+                THU,10,58,transition
+                THU,11,46,3rd period
+                THU,11,50,transition
+                THU,12,38,4th period
+                THU,1,11,lunch
+                THU,1,15,transition
+                THU,2,3,5th period
+                THU,2,7,transition
+                THU,2,55,6th period
+                FRI,8,30,weekend
+                FRI,9,20,1st period
+                FRI,9,24,transition
+                FRI,10,14,2nd period
+                FRI,10,24,nutrition
+                FRI,10,28,transition
+                FRI,10,48,advisory
+                FRI,11,38,3rd period
+                FRI,11,42,transition
+                FRI,12,32,4th period
+                FRI,1,7,lunch
+                FRI,1,11,transition
+                FRI,2,1,5th period
+                FRI,2,5,transition
+                FRI,2,55,6th period
+                `
+            }
+            if (gradebell==7){
+                bellstring = `
+                MON,8,30,weekend
+                MON,9,20,1st period
+                MON,9,24,transition
+                MON,10,14,2nd period
+                MON,10,24,nutrition
+                MON,10,28,transition
+                MON,10,48,advisory
+                MON,11,38,3rd period
+                MON,11,42,transition
+                MON,12,32,4th period
+                MON,1,7,lunch
+                MON,1,11,transition
+                MON,2,1,5th period
+                MON,2,5,transition
+                MON,2,55,6th period
+                TUE,8,30,school ends
+                TUE,9,18,1st period
+                TUE,9,22,transition
+                TUE,10,10,2nd period
+                TUE,10,20,nutrition
+                TUE,10,24,transition
+                TUE,10,54,tutorial
+                TUE,10,58,transition
+                TUE,11,46,3rd period
+                TUE,11,50,transition
+                TUE,12,38,4th period
+                TUE,1,11,lunch
+                TUE,1,15,transition
+                TUE,2,3,5th period
+                TUE,2,7,transition
+                TUE,2,55,6th period
+                WED,9,30,school ends
+                WED,10,10,1st period
+                WED,10,14,transition
+                WED,10,54,2nd period
+                WED,11,4,nutrition
+                WED,11,8,transition
+                WED,11,28,advisory
+                WED,12,8,3rd period
+                WED,12,12,transition
+                WED,12,52,4th period
+                WED,1,27,lunch
+                WED,1,31,transition
+                WED,2,11,5th period
+                WED,2,15,transition
+                WED,2,55,6th period
+                THU,8,30,school ends
+                THU,9,18,1st period
+                THU,9,22,transition
+                THU,10,10,2nd period
+                THU,10,20,nutrition
+                THU,10,24,transition
+                THU,10,54,tutorial
+                THU,10,58,transition
+                THU,11,46,3rd period
+                THU,11,50,transition
+                THU,12,38,4th period
+                THU,1,11,lunch
+                THU,1,15,transition
+                THU,2,3,5th period
+                THU,2,7,transition
+                THU,2,55,6th period
+                FRI,8,30,weekend
+                FRI,9,20,1st period
+                FRI,9,24,transition
+                FRI,10,14,2nd period
+                FRI,10,24,nutrition
+                FRI,10,28,transition
+                FRI,10,48,advisory
+                FRI,11,38,3rd period
+                FRI,11,42,transition
+                FRI,12,32,4th period
+                FRI,1,7,lunch
+                FRI,1,11,transition
+                FRI,2,1,5th period
+                FRI,2,5,transition
+                FRI,2,55,6th period
+                `              
+            }
+        }
+    </script>
+</body>
+
+</html>
