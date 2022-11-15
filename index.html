@@ -3,12 +3,37 @@
 
 <head>
     <title id="ctitle">Count down</title>
+    <style>
+      .container1 {
+        display: flex;
+        align-items: center;
+        justify-content: left
+      }
+      img {
+        max-width: 100%
+      }
+      .image1 {
+        flex-basis: 10%
+      }
+      .text1 {
+        
+        font-size: 15px;
+        padding-left: 20px;
+      }
+    </style>
 </head>
 
 <body onload="doStartClock();">
 
-    <h2 style="text-align: left;">Creekside Middle School, 2022-23</h2>
-    <h2 style="text-align: left;">6/7/8th-grade bell timer, week of Nov 14</h2>
+    <div class="container1">
+      <div class="image1">
+        <img src="images/Wildcats100.gif">
+      </div>
+      <div class="text1">
+        <h2>Creekside Middle School 2022-23</h2>
+        <h2>6/7/8th-grade bell timer</h2>
+      </div>
+    </div>
 
     <p id="timePar7" style="font-size:8em;font-family: 'Courier New', Courier, monospace;text-align: left; line-height: 20%">00:00:00
     </p>
@@ -24,7 +49,7 @@
  // removed display of 6th grade bell schedule
  // Javascript program designed and written by Patrick Cheung
         // Jan 17, 2022, in Castro Valley, CA
-        document.body.style.backgroundImage = "url('https://dl.dropboxusercontent.com/s/tb5pqjwr8o0ku3j/background3.jpg')";
+        document.body.style.backgroundImage = "url('./images/timer_background4.jpg')";
 
         gradebell = 6;
         BellArrayTemp = [];
@@ -300,80 +325,80 @@ OutputElement.textContent = PurposeString;
             }
             if (gradebell==7){
                 bellstring = `
-                MON,8,30,Happy Thanksgiving!
+                MON,8,30,see you 8:30 Monday!
                 MON,9,20,1st period
-                MON,9,24,moving to 2nd
+                MON,9,24,transition
                 MON,10,14,2nd period
                 MON,10,24,nutrition
-                MON,10,28,settling to advisory
+                MON,10,28,transition
                 MON,10,48,advisory
                 MON,11,38,3rd period
-                MON,11,42,moving to 4th
+                MON,11,42,transition
                 MON,12,32,4th period
                 MON,1,7,lunch
-                MON,1,11,settling to 5th
+                MON,1,11,transition
                 MON,2,1,5th period
-                MON,2,5,moving to 6th
+                MON,2,5,transition
                 MON,2,55,6th period
-                TUE,8,30,See you 8:30 AM!
+                TUE,8,30,see you 8:30 in the morning!
                 TUE,9,18,1st period
-                TUE,9,22,moving to 2nd
+                TUE,9,22,transition
                 TUE,10,10,2nd period
                 TUE,10,20,nutrition
-                TUE,10,24,settling to tutorial
+                TUE,10,24,transition
                 TUE,10,54,tutorial
-                TUE,10,58,moving to 3rd
+                TUE,10,58,transition
                 TUE,11,46,3rd period
-                TUE,11,50,moving to 4th
+                TUE,11,50,transition
                 TUE,12,38,4th period
                 TUE,1,11,lunch
-                TUE,1,15,settling to 5th
+                TUE,1,15,transition
                 TUE,2,3,5th period
-                TUE,2,7,moving to 6th
+                TUE,2,7,transition
                 TUE,2,55,6th period
-                WED,9,30,See you 9:30 AM!
+                WED,9,30,see you 9:30 in the morning!
                 WED,10,10,1st period
-                WED,10,14,moving to 2nd
+                WED,10,14,transition
                 WED,10,54,2nd period
                 WED,11,4,nutrition
-                WED,11,8,moving to advisory
+                WED,11,8,transition
                 WED,11,28,advisory
                 WED,12,8,3rd period
-                WED,12,12,moving to 4th
+                WED,12,12,transition
                 WED,12,52,4th period
                 WED,1,27,lunch
-                WED,1,31,settling to 5th
+                WED,1,31,transition
                 WED,2,11,5th period
-                WED,2,15,moving to 6th
+                WED,2,15,transition
                 WED,2,55,6th period
-                THU,8,30,See you 8:30 AM!
+                THU,8,30,see you 8:30 in the morning!
                 THU,9,18,1st period
-                THU,9,22,moving to 2nd
+                THU,9,22,transition
                 THU,10,10,2nd period
                 THU,10,20,nutrition
-                THU,10,24,settling to tutorial
+                THU,10,24,transition
                 THU,10,54,tutorial
-                THU,10,58,moving to 3rd
+                THU,10,58,transition
                 THU,11,46,3rd period
-                THU,11,50,moving to 4th
+                THU,11,50,transition
                 THU,12,38,4th period
                 THU,1,11,lunch
-                THU,1,15,settling to 5th
+                THU,1,15,transition
                 THU,2,3,5th period
-                THU,2,7,moving to 6th
+                THU,2,7,transition
                 THU,2,55,6th period
-                FRI,8,30,See you 8:30 AM!
+                FRI,8,30,see you 8:30 in the morning!
                 FRI,9,3,1st period
-                FRI,9,7,moving to 2nd
+                FRI,9,7,transition
                 FRI,9,40,2nd period
-                FRI,9,44,moving to 3rd
+                FRI,9,44,nutrition
                 FRI,10,17,3rd period
-                FRI,10,21,moving to 4th
+                FRI,10,21,transition
                 FRI,10,54,4th period
-                FRI,11,16,nutrition 20 minutes
-                FRI,11,20,settling to 5th
+                FRI,11,16,nutrition
+                FRI,11,20,transition
                 FRI,11,53,5th period
-                FRI,11,57,moving to 6th
+                FRI,11,57,transition
                 FRI,12,30,6th period
                 `              
             }
