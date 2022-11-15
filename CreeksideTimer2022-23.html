@@ -3,12 +3,37 @@
 
 <head>
     <title id="ctitle">Count down</title>
+    <style>
+      .container1 {
+        display: flex;
+        align-items: center;
+        justify-content: left
+      }
+      img {
+        max-width: 100%
+      }
+      .image1 {
+        flex-basis: 10%
+      }
+      .text1 {
+        
+        font-size: 15px;
+        padding-left: 20px;
+      }
+    </style>
 </head>
 
 <body onload="doStartClock();">
 
-    <h2 style="text-align: left;">Creekside Middle School, 2022-23</h2>
-    <h2 style="text-align: left;">6/7/8th-grade bell timer</h2>
+    <div class="container1">
+      <div class="image1">
+        <img src="https://www.dropbox.com/s/qbswcczv35ekzdh/Wildcats100.gif?dl=1">
+      </div>
+      <div class="text1">
+        <h2>Creekside Middle School 2022-23</h2>
+        <h2>6/7/8th-grade bell timer</h2>
+      </div>
+    </div>
 
     <p id="timePar7" style="font-size:8em;font-family: 'Courier New', Courier, monospace;text-align: left; line-height: 20%">00:00:00
     </p>
