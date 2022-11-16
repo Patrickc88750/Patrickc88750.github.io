@@ -31,24 +31,31 @@
         justify-content: left
       }
       img {
-        max-width: 100%
+        max-width:100%
       }
       .image1 {
-        flex-basis: 10%
+        flex-basis: 15%
       }
       .text1 {
-        
+        text-align: left;
         font-size: 15px;
         padding-left: 20px;
       }
       .text2{
-        height:130pt;
+        height: 130pt;
+        font-weight: 500;
 		overflow:hidden;
-		line-height:1pt;
+		line-height:1px;
         font-size: 8em;
         font-family: 'Courier New', Courier, monospace;
         text-align: left; 
     }
+    .text3 {
+        font-size: 4em;
+        text-align: left;
+        font-weight: 600;
+        padding-left: 20px;
+      }
     </style>
 </head>
 
@@ -63,11 +70,16 @@
         <h2>6/7/8th-grade bell timer</h2>
       </div>
     </div>
+
     <div class="text2">
         <p id="timePar7">00:00:00
         </p>
     </div>
-	<h2 id="whatsitfor" style="text-align: left;font-size:4em;">waiting</h2>
+
+    <div class="text3">
+        <p id="whatsitfor">Creekside Timer</p>
+    </div>
+	
     <script>
  // Oct 22 2022
  // moved paragraph <p> and </p> from body three lines above 
@@ -79,7 +91,7 @@
  // removed display of 6th grade bell schedule
  // Javascript program designed and written by Patrick Cheung
         // Jan 17, 2022, in Castro Valley, CA
-        document.body.style.backgroundImage = "url('./images/timer_background4.jpg')";
+ //       document.body.style.backgroundImage = "url('./images/timer_background4.jpg')";
 
         gradebell = 6;
         BellArrayTemp = [];
