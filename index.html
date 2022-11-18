@@ -3,6 +3,27 @@
 
 <head>
     <title id="ctitle">Count down</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="57x57" href="apple-touch-icon-57x57.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="apple-touch-icon-114x114.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="apple-touch-icon-72x72.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="apple-touch-icon-144x144.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="60x60" href="apple-touch-icon-60x60.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="120x120" href="apple-touch-icon-120x120.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="76x76" href="apple-touch-icon-76x76.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="apple-touch-icon-152x152.png" />
+    <link rel="icon" type="image/png" href="favicon-196x196.png" sizes="196x196" />
+    <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16" />
+    <link rel="icon" type="image/png" href="favicon-128.png" sizes="128x128" />
+    <meta name="application-name" content="&nbsp;"/>
+    <meta name="msapplication-TileColor" content="#FFFFFF" />
+    <meta name="msapplication-TileImage" content="mstile-144x144.png" />
+    <meta name="msapplication-square70x70logo" content="mstile-70x70.png" />
+    <meta name="msapplication-square150x150logo" content="mstile-150x150.png" />
+    <meta name="msapplication-wide310x150logo" content="mstile-310x150.png" />
+    <meta name="msapplication-square310x310logo" content="mstile-310x310.png" />
     <style>
       .container1 {
         display: flex;
@@ -10,14 +31,29 @@
         justify-content: left
       }
       img {
-        max-width: 100%
+        max-width:100%
       }
       .image1 {
-        flex-basis: 10%
+        flex-basis: 15%
       }
       .text1 {
-        
+        text-align: left;
         font-size: 15px;
+        padding-left: 10px;
+      }
+      .text2{
+        height: 130pt;
+        font-weight: normal;
+		overflow:hidden;
+		line-height:1px;
+        font-size: 8em;
+        font-family: 'Courier New', Courier, monospace;
+        text-align: left; 
+    }
+    .text3 {
+        font-size: 4em;
+        text-align: left;
+        font-weight: bold;
         padding-left: 20px;
       }
     </style>
@@ -35,9 +71,20 @@
       </div>
     </div>
 
-    <p id="timePar7" style="font-size:8em;font-family: 'Courier New', Courier, monospace;text-align: left; line-height: 20%">00:00:00
-    </p>
-	<h2 id="whatsitfor" style="text-align: left;font-size:4em;">waiting</h2>
+    <div class="text2">
+        <p id="timePar7"> 
+        </p>
+    </div>
+
+    <div class="text3">
+        <p id="whatsitfor">Creekside Timer</p>
+    </div>
+    <h3>Resources:</h3>
+    <p><a href="https://creekside.cv.k12.ca.us/apps/pages/index.jsp?uREC_ID=1377072&type=d&pREC_ID=1559779">Creekside daily bell schedule</a></p>
+    <p><a href="https://creekside.cv.k12.ca.us/apps/pages/index.jsp?uREC_ID=1377072&type=d&pREC_ID=1577358">Creekside monthly calendar</a></p>
+    <p><a href="https://drive.google.com/file/d/1jOBnSvQN-vzocUNM4lk9YYS5Qoro3WAC/view">Creekside early release/minimum day schedule</a></p>
+    <p><a href="https://drive.google.com/file/d/1u-HJrEZFCEn55S9txb-kb9CS4jPYgHtD/view">Castro Valley CVUSD annual calendar</a></p>
+    <p><a href="https://creekside.cv.k12.ca.us/">Creekside Middle School official website</a></p>
     <script>
  // Oct 22 2022
  // moved paragraph <p> and </p> from body three lines above 
@@ -49,7 +96,7 @@
  // removed display of 6th grade bell schedule
  // Javascript program designed and written by Patrick Cheung
         // Jan 17, 2022, in Castro Valley, CA
-        document.body.style.backgroundImage = "url('./images/timer_background4.jpg')";
+ //       document.body.style.backgroundImage = "url('./images/timer_background4.jpg')";
 
         gradebell = 6;
         BellArrayTemp = [];
@@ -390,7 +437,7 @@ OutputElement.textContent = PurposeString;
                 FRI,8,30,See you 8:30 AM!
                 FRI,9,3,1st period
                 FRI,9,7,moving to 2nd
-                FRI,9,40,2nd period
+                FRI,9,40,P2 no nutrition
                 FRI,9,44,moving to 3rd
                 FRI,10,17,3rd period
                 FRI,10,21,moving to 4th
@@ -399,7 +446,7 @@ OutputElement.textContent = PurposeString;
                 FRI,11,20,settling to 5th
                 FRI,11,53,5th period
                 FRI,11,57,moving to 6th
-                FRI,12,30,6th period
+                FRI,12,30,P6 getting ready!
                 `              
             }
         }
