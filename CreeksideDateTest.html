@@ -106,8 +106,8 @@
             <br>
             <input type="button" value="Find Timer and messages" name="testbutton" onclick="testbutton_onclick()">
         </p>
-
     </form>
+    <p id="showdayofweek">Shows day of week</p>
     
     <p id="clocktickindicator">-</p>
     <script>
@@ -148,7 +148,7 @@
             thour = document.form1.testhour.value;
             tmin = document.form1.testminute.value;
             tsec = document.form1.testsecond.value;
-            switch(tmonthnum){
+            switch(parseInt(tmonthnum)){
                 case 1:
                     tmonth = "January";
                     break;
@@ -190,6 +190,10 @@
             }
             testdate = tmonth + " " + tday + ", " + tyear + " " + thour + ":" + tmin + ":" + tsec;
             doClockTick();
+            var weekString = YearArray[todayindex][2];
+            var OutputElement = document.getElementById("showdayofweek");
+            OutputElement.textContent = weekString;
+            
         }
 
         function doStartClock() {
