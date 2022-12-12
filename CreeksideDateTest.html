@@ -99,7 +99,7 @@
             <input type="text" name="testyear" onblur="year_onblur()" value=2022 size=5 maxlength=4>
             <input type="text" name="testmonth" onblur="month_onblur()" value=12 size=5 maxlength=2>
             <input type="text" name="testday" onblur="day_onblur()" value=12 size=5 maxlength=2>
-            <input type="text" name="testhour" onblur="hour_onblur()" value=0 size=5 maxlength=2>
+            <input type="text" name="testhour" onblur="hour_onblur()" value=12 size=5 maxlength=2>
             <input type="text" name="testminute" onblur="minute_onblur()" value=0 size=5 maxlength=2>
             <input type="text" name="testsecond" onblur="second_onblur()" value=0 size=5 maxlength=2>
             <br>
@@ -201,7 +201,7 @@
             MakeBellSchedule(); // Yearstring, DayXstring created
           
             YeartoArrayFunction();  // return YearArrayTemp and yearcount
-            testdate = "December 12, 2022 0:0:0";
+            testdate = "December 12, 2022 12:0:0";
             doClockTick();  // setInterval does Delay first then action
 
             // setInterval(doClockTick, 1000);
@@ -321,6 +321,9 @@
                 case 70:
                     Todaystring = DayFstring;
                     break;
+                case 71:
+                    Todaystring = DayGstring;
+                    break;
                 
                 case 90:
                     Todaystring = 0;
@@ -344,6 +347,9 @@
                     break;
                 case 70:
                     Nextdaystring = DayFstring;
+                    break;
+                case 71:
+                    Nextdaystring = DayGstring;
                     break;
                 
                 case 90:
@@ -706,6 +712,26 @@
             1,55,6th period
             `
 
+            DayGstring = `
+            8,30,Assembly CU at 8:30
+            9,14,1st period
+            9,18,moving to 2nd
+            10,2,2nd period
+            10,12,nutrition
+            10,16,settling to advisory
+            10,24,advisory
+            11,8,3rd period
+            11,12,moving to 4th
+            11,56,4th period
+            12,31,lunch
+            12,35,settling to 5th
+            1,19,5th period
+            1,23,moving to Assembly
+            2,7,Assembly
+            2,11,moving to 6th
+            2,55,6th period
+            `
+
             Yearstring = `
             2022,8,9,TUE,E,69,,,1
             2022,8,10,WED,C,67,,,2
@@ -839,7 +865,7 @@
             2022,12,16,FRI,A,65,,,130
             2022,12,17,SAT,Z,90,,,131
             2022,12,18,SUN,Z,90,,,132
-            2022,12,19,MON,A,65,,,133
+            2022,12,19,MON,G,71,,,133
             2022,12,20,TUE,B,66,,,134
             2022,12,21,WED,E,69,,,135
             2022,12,22,THU,E,69,Q,end of Q2,136
