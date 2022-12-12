@@ -221,9 +221,9 @@
             } else { 
                 // show clock tick on bottom of page
                 if (secs % 2 == 0){
-                    var tickstring = "--";
+                    var tickstring = "-|-";
                 } else {
-                    var tickstring = "|";
+                    var tickstring = "|-|";
                 }
                 var  outputElement = document.getElementById("clocktickindicator");
                 outputElement.textContent = tickstring;
