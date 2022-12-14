@@ -25,48 +25,49 @@
     <meta name="msapplication-wide310x150logo" content="mstile-310x150.png" />
     <meta name="msapplication-square310x310logo" content="mstile-310x310.png" />
     <style>
-      .container1 {
-        display: flex;
-        align-items: center;
-        justify-content: left
-      }
-      img {
-        max-width:100%
-      }
-      .image1 {
-        flex-basis: 15%
-      }
-      .text1 {
-        text-align: left;
-        font-size: 1em;
-        padding-left: 10px;
-      }
-      .text2{
-        height: 130pt;
-        font-weight: normal;
-		overflow:hidden;
-		line-height:1px;
-        font-size: 8em;
-        font-family: 'Courier New', Courier, monospace;
-        text-align: left; 
-        padding-left: 10px;
-    }
-    .text3 {
-        font-size: 4em;
-        text-align: left;
-        font-weight: bold;
-        padding-left: 10px;
-      }
-      .text4 {
-        font-size: 2em;
-        text-align: left;
-        font-weight: bold;
-        padding-left: 10px;
-      }
-      .text5 {
-        font-size: 1.5em;
-        padding-left: 10px;
-      }
+        .container1 {
+            display: flex;
+            align-items: center;
+            justify-content: left
+        }
+        img {
+            max-width:100%
+        }
+        .image1 {
+            flex-basis: 15%
+        }
+        .text1 {
+            text-align: left;
+            font-size: 1em;
+            padding-left: 10px;
+        }
+        .text2{
+            height: 130pt;
+            font-weight: normal;
+            overflow:hidden;
+            line-height:1px;
+            font-size: 8em;
+            font-family: 'Courier New', Courier, monospace;
+            text-align: left; 
+            padding-left: 10px;
+        }
+        .text3 {
+            font-size: 4em;
+            text-align: left;
+            font-weight: bold;
+            padding-left: 10px;
+        }
+        .text4 {
+            font-size: 2em;
+            text-align: left;
+            font-weight: bold;
+            padding-left: 10px;
+        }
+        .text5 {
+            font-size: 1.5em;
+            text-align: center;
+            padding-left: 10px;
+        }
     </style>
 </head>
 
@@ -83,12 +84,12 @@
     </div>
 
     <div class="text2">
-        <p id="timePar">Canyon 7/8
+        <p id="timePar">
         </p>
     </div>
 
     <div class="text3">
-        <p id="whatsitfor">Annual timer</p>
+        <p id="whatsitfor"></p>
     </div>
     <div class="text4">
         <p id="tobreak">Days left to a break</p>
@@ -436,7 +437,7 @@
                     DaytoArray();
                     NextdaybellArray = BellArray;
                     // display message from DayXstring
-                    var PurposeString = NextdaybellArray[0][4] + " " + YearArray[todayindex+1][2] + "!";
+                    var PurposeString = "See you tomorrow at " + NextdaybellArray[0][0] + ":" + NextdaybellArray[0][1] + " !";
                     var OutputElement = document.getElementById("whatsitfor");
                     OutputElement.textContent = PurposeString;
                 }
@@ -476,7 +477,7 @@
                     Onedaystring = Nextdaystring;
                     DaytoArray();
                     NextdaybellArray = BellArray;
-                    var PurposeString = "CU tomorrow at " + NextdaybellArray[0][0] + ":" + NextdaybellArray[0][1] + " !";
+                    var PurposeString = "See you tomorrow at " + NextdaybellArray[0][0] + ":" + NextdaybellArray[0][1] + " !";
                     var OutputElement = document.getElementById("whatsitfor");
                     OutputElement.textContent = PurposeString;
                     var titlestring = "Zzz...";  // clear the title
@@ -583,7 +584,7 @@
                 // BellArray column definition
                 // 0: tokens[0] hour
                 // 1: tokens[1] minute
-                // 2: 0 second -- schedules pecified down to minutes only 
+                // 2: 0 second -- schedules specified down to minutes only 
                 // 3: composite hourminutesecond on the schedule
                 // 4: event messages
                 // 5: Keyperiod -- all events excluding transitions
@@ -666,7 +667,7 @@
             var endhr = 0;
             var endmin = 0;
             var timespanstring = 0;
-            todayrows.push(["Time", "Event today"]);
+            todayrows.push(["Time for today only", TodaybellArray[0][4] + " Schedule"]);
             
             for (i=0; i < Todaycount; ++i){
                 
@@ -712,7 +713,7 @@
 
         function MakeBellSchedule(){
             DayAstring = `
-            8,45,See you at 8:45
+            8,45,Regular M/F
             9,50,Adv. 1st period
             9,55,moving to 2nd
             10,45,2nd period
@@ -728,7 +729,7 @@
             3,10,6th period
             `
             DayBstring = `
-            8,45,Condor Time day CU at 8:45
+            8,45,Condor Time day
             9,35,1st period
             9,40,moving to 2nd
             10,25,2nd period
@@ -746,7 +747,7 @@
             3,10,6th period
             `
             DayCstring = `
-            8,45,210 Release day CU at 8:45
+            8,45,(Wed)Early Release day
             9,40,Adv. 1st period
             9,45,moving to 2nd
             10,25,2nd period
@@ -762,7 +763,7 @@
             2,10,6th period
             `
             DayDstring = `
-            8,45,Minimum day CU 8:45
+            8,45,Minimum day
             10,5,Adv. + Period 1/2
             10,25,nutrition
             10,30,passing to P3/4

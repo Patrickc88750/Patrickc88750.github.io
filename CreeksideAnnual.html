@@ -65,6 +65,7 @@
       }
       .text5 {
         font-size: 1.5em;
+        text-align: center;
         padding-left: 10px;
       }
     </style>
@@ -83,12 +84,12 @@
     </div>
 
     <div class="text2">
-        <p id="timePar">Creekside
+        <p id="timePar">
         </p>
     </div>
 
     <div class="text3">
-        <p id="whatsitfor">Annual timer</p>
+        <p id="whatsitfor"></p>
     </div>
     <div class="text4">
         <p id="tobreak">Days left to a break</p>
@@ -137,12 +138,15 @@
             MakeBellSchedule(); // Yearstring, DayXstring created
           
             YeartoArrayFunction();  // return YearArrayTemp and yearcount
-            
-            doClockTick();  // setInterval does Delay first then action
 
+            doClockTick();  // setInterval does Delay first then action
             GenerateTable();
 
-            setInterval(doClockTick, 1000);
+            setInterval(doClockTick, 1000);            
+        }
+
+        function doNothing(){
+            // a time delay function
         }
 
         function YeartoArrayFunction() {
@@ -417,6 +421,7 @@
             //
             if (YearArray[todayindex][4] == 90) {  // similar to Todaystring = 0
                     // display in large font NO SCHOOL
+                    // no school today
                     var timeString ="NO SCHOOL";
                     document.getElementById("timePar").style.color = 'black';
                     document.getElementById("ctitle").style.color = 'black';
@@ -428,18 +433,20 @@
                     outputElement.textContent = titlestring;
 
                 if (YearArray[todayindex+1][4] == 90) {  // similar to Nextdaystring = 0
+                    // if tomorrow is also no school
                     // count and display below how many days till back to school  
                     var PurposeString = "Back to School in " + YearArray[todayindex][7] + " days";
                     var OutputElement = document.getElementById("whatsitfor");
                     OutputElement.textContent = PurposeString;
                 } else {
+                    // but if tomorrow school resumes, need to know when to wake up
                     // build Nextdaybellarray
                     Onedaystring = Nextdaystring;
                     DaytoArray();
                     NextdaybellArray = BellArray;
                     Nextdaycount = Onedaycount;
                     // display message from DayXstring
-                    var PurposeString = NextdaybellArray[0][4] + " " + YearArray[todayindex+1][2] + "!";
+                    var PurposeString = "See you tomorrow at " + NextdaybellArray[0][0] + ":" + NextdaybellArray[0][1] + " !";
                     var OutputElement = document.getElementById("whatsitfor");
                     OutputElement.textContent = PurposeString;
                 }
@@ -480,7 +487,8 @@
                     DaytoArray();
                     NextdaybellArray = BellArray;
                     Nextdaycount = Onedaycount;
-                    var PurposeString = "CU tomorrow at " + NextdaybellArray[0][0] + ":" + NextdaybellArray[0][1] + " !";
+                    // event message after school and evenings
+                    var PurposeString = "See you tomorrow at " + NextdaybellArray[0][0] + ":" + NextdaybellArray[0][1] + " !";
                     var OutputElement = document.getElementById("whatsitfor");
                     OutputElement.textContent = PurposeString;
                     var titlestring = "Zzz...";  // clear the title
@@ -587,7 +595,7 @@
                 // BellArray column definition
                 // 0: tokens[0] hour
                 // 1: tokens[1] minute
-                // 2: 0 second -- schedules pecified down to minutes only 
+                // 2: 0 second -- schedules specified down to minutes only 
                 // 3: composite hourminutesecond on the schedule
                 // 4: event messages
                 // 5: Keyperiod -- all events excluding transitions
@@ -670,7 +678,7 @@
             var endhr = 0;
             var endmin = 0;
             var timespanstring = 0;
-            todayrows.push(["Time", "Event today"]);
+            todayrows.push(["Time for today only", TodaybellArray[0][4] + " Schedule"]);
             
             for (i=0; i < Todaycount; ++i){
                 
@@ -713,10 +721,10 @@
             dvTable.innerHTML = "";
             dvTable.appendChild(table);
         }
-
+        
         function MakeBellSchedule(){
             DayAstring = `
-            8,30,See you at 8:30
+            8,30,Regular M/F
             9,20,1st period
             9,24,moving to 2nd
             10,14,2nd period
@@ -733,7 +741,7 @@
             2,55,6th period
             `
             DayBstring = `
-            8,30,See you at 8:30
+            8,30,Regular Tutorial Tu/Th
             9,18,1st period
             9,22,moving to 2nd
             10,10,2nd period
@@ -751,7 +759,7 @@
             2,55,6th period
             `
             DayCstring = `
-            9,30,See you at 9:30
+            9,30,Wednesday
             10,10,1st period
             10,14,moving to 2nd
             10,54,2nd period
@@ -768,7 +776,7 @@
             2,55,6th period
             `
             DayDstring = `
-            8,30,Early Release CU at 8:30
+            8,30,Early Release Tutorial
             9,8,1st period
             9,12,moving to 2nd
             9,50,2nd period
@@ -786,7 +794,7 @@
             1,55,6th period
             `
             DayEstring = `
-            8,30,Minimum Day CU at 8:30
+            8,30,Minimum Day
             9,3,1st period
             9,7,moving to 2nd
             9,40,2nd period
@@ -801,7 +809,7 @@
             12,30,6th period
             `
             DayFstring = `
-            8,30,Early Release CU at 8:30
+            8,30,Early Release Advisory
             9,10,1st period
             9,14,moving to 2nd
             9,54,2nd period
@@ -819,7 +827,7 @@
             `
 
             DayGstring = `
-            8,30,Assembly CU at 8:30
+            8,30,Assembly
             9,14,1st period
             9,18,moving to 2nd
             10,2,2nd period
