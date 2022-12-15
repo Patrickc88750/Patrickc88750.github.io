@@ -25,49 +25,49 @@
     <meta name="msapplication-wide310x150logo" content="mstile-310x150.png" />
     <meta name="msapplication-square310x310logo" content="mstile-310x310.png" />
     <style>
-        .container1 {
-            display: flex;
-            align-items: center;
-            justify-content: left
-        }
-        img {
-            max-width:100%
-        }
-        .image1 {
-            flex-basis: 15%
-        }
-        .text1 {
-            text-align: left;
-            font-size: 1em;
-            padding-left: 10px;
-        }
-        .text2{
-            height: 130pt;
-            font-weight: normal;
-            overflow:hidden;
-            line-height:1px;
-            font-size: 8em;
-            font-family: 'Courier New', Courier, monospace;
-            text-align: left; 
-            padding-left: 10px;
-        }
-        .text3 {
-            font-size: 4em;
-            text-align: left;
-            font-weight: bold;
-            padding-left: 10px;
-        }
-        .text4 {
-            font-size: 2em;
-            text-align: left;
-            font-weight: bold;
-            padding-left: 10px;
-        }
-        .text5 {
-            font-size: 1.5em;
-            text-align: center;
-            padding-left: 10px;
-        }
+      .container1 {
+        display: flex;
+        align-items: center;
+        justify-content: left
+      }
+      img {
+        max-width:100%
+      }
+      .image1 {
+        flex-basis: 15%
+      }
+      .text1 {
+        text-align: left;
+        font-size: 1em;
+        padding-left: 10px;
+      }
+      .text2{
+        height: 130pt;
+        font-weight: normal;
+		overflow:hidden;
+		line-height:1px;
+        font-size: 8em;
+        font-family: 'Courier New', Courier, monospace;
+        text-align: left; 
+        padding-left: 10px;
+    }
+    .text3 {
+        font-size: 4em;
+        text-align: left;
+        font-weight: bold;
+        padding-left: 10px;
+      }
+      .text4 {
+        font-size: 2em;
+        text-align: left;
+        font-weight: bold;
+        padding-left: 10px;
+      }
+      .text5 {
+        font-size: 1.5em;
+        text-align: center;
+        padding-left: 10px;
+      }
     </style>
 </head>
 
@@ -75,11 +75,11 @@
 
     <div class="container1">
       <div class="image1">
-        <img src="./images/Condor100.gif">
+        <img src="./images/Wildcats100.gif">
       </div>
       <div class="text1">
-        <h2>Canyon Middle School</h2>
-        <h2>7/8th-grade bell timer</h2>
+        <h2>Creekside Middle School</h2>
+        <h2>6/7/8th-grade bell timer</h2>
       </div>
     </div>
 
@@ -100,18 +100,19 @@
     <div id="dvTable" class="text5"></div>
     
     <h3>Resources:</h3>
-    <p><a href="https://canyon.cv.k12.ca.us/apps/pages/index.jsp?uREC_ID=1381543&type=d&pREC_ID=2386364">Canyon daily bell schedule 2022-23</a></p>
-    <p><a href="https://canyon.cv.k12.ca.us/apps/pages/index.jsp?uREC_ID=1381543&type=d&pREC_ID=1575508">Canyon monthly calendar</a></p>
-    <p><a href="./images/Canyon Minimum Day Block schedule 2022-23.jpg">Canyon Minimum Day Block schedule</a></p>
+    <p><a href="https://creekside.cv.k12.ca.us/apps/pages/index.jsp?uREC_ID=1377072&type=d&pREC_ID=1559779">Creekside daily bell schedule 2022-23</a></p>
+    <p><a href="https://creekside.cv.k12.ca.us/apps/pages/index.jsp?uREC_ID=1377072&type=d&pREC_ID=1577358">Creekside monthly calendar</a></p>
+    <p><a href="https://drive.google.com/file/d/1jOBnSvQN-vzocUNM4lk9YYS5Qoro3WAC/view">Creekside early release/minimum day schedule</a></p>
     <p><a href="https://drive.google.com/file/d/1u-HJrEZFCEn55S9txb-kb9CS4jPYgHtD/view">Castro Valley CVUSD annual calendar</a></p>
-    <p><a href="https://canyon.cv.k12.ca.us/">Canyon Middle School official website</a></p>
+    <p><a href="https://creekside.cv.k12.ca.us/">Creekside Middle School official website</a></p>
     <p>Disclaimer: This website is not responsible for any consequences 
         such as absence, tardiness, or missing homeworks due to
         incorrect information being read on this webpage. Users 
         should exerecise their judgement and check for correctness 
         of schedules and dates on the school official websites.</p>
-    <p id="clocktickindicator">-</p>
-    <script>
+    <p id="clocktickindicator">-</p>    
+
+    <script type="text/javascript">
 
 // Javascript program designed and written by Patrick Cheung
 // Dec 7th, 2022, in Castro Valley, CA
@@ -128,6 +129,7 @@
         nextbellindex = 0;
         Onedaycount = 0; // number of bell in BellArray
         Todaycount = 0;
+        Nextdaycount = 0;
         Secondsumnow = 0;
         bellday = 0;
         bellhour = 0;
@@ -141,12 +143,15 @@
             MakeBellSchedule(); // Yearstring, DayXstring created
           
             YeartoArrayFunction();  // return YearArrayTemp and yearcount
-            
+
             doClockTick();  // setInterval does Delay first then action
-            
             GenerateTable();
 
-            setInterval(doClockTick, 1000);
+            setInterval(doClockTick, 1000);            
+        }
+
+        function doNothing(){
+            // a time delay function
         }
 
         function YeartoArrayFunction() {
@@ -421,6 +426,7 @@
             //
             if (YearArray[todayindex][4] == 90) {  // similar to Todaystring = 0
                     // display in large font NO SCHOOL
+                    // no school today
                     var timeString ="NO_SCHOOL";
                     document.getElementById("timePar").style.color = 'black';
                     document.getElementById("ctitle").style.color = 'black';
@@ -432,15 +438,18 @@
                     outputElement.textContent = titlestring;
 
                 if (YearArray[todayindex+1][4] == 90) {  // similar to Nextdaystring = 0
+                    // if tomorrow is also no school
                     // count and display below how many days till back to school  
                     var PurposeString = "Back to School in " + YearArray[todayindex][7] + " days";
                     var OutputElement = document.getElementById("whatsitfor");
                     OutputElement.textContent = PurposeString;
                 } else {
+                    // but if tomorrow school resumes, need to know when to wake up
                     // build Nextdaybellarray
                     Onedaystring = Nextdaystring;
                     DaytoArray();
                     NextdaybellArray = BellArray;
+                    Nextdaycount = Onedaycount;
                     // display message from DayXstring
                     var PurposeString = "See you tomorrow at " + NextdaybellArray[0][0] + ":" + NextdaybellArray[0][1] + " !";
                     var OutputElement = document.getElementById("whatsitfor");
@@ -482,6 +491,8 @@
                     Onedaystring = Nextdaystring;
                     DaytoArray();
                     NextdaybellArray = BellArray;
+                    Nextdaycount = Onedaycount;
+                    // event message after school and evenings
                     var PurposeString = "See you tomorrow at " + NextdaybellArray[0][0] + ":" + NextdaybellArray[0][1] + " !";
                     var OutputElement = document.getElementById("whatsitfor");
                     OutputElement.textContent = PurposeString;
@@ -715,80 +726,133 @@
             dvTable.innerHTML = "";
             dvTable.appendChild(table);
         }
-
+        
         function MakeBellSchedule(){
             DayAstring = `
-            8,45,Regular M/F
-            9,50,Adv. 1st period
-            9,55,moving to 2nd
-            10,45,2nd period
-            10,55,nutrition
-            11,0,settling to 3rd
-            11,50,3rd period
-            11,55,moving to 4th
-            12,45,4th period
-            1,20,Lunch
-            1,25,moving to 5th
-            2,15,5th period
-            2,20,moving to 6th
-            3,10,6th period
+            8,30,Regular M/F
+            9,20,1st period
+            9,24,moving to 2nd
+            10,14,2nd period
+            10,24,nutrition
+            10,28,settling to advisory
+            10,48,advisory
+            11,38,3rd period
+            11,42,moving to 4th
+            12,32,4th period
+            1,7,lunch
+            1,11,settling to 5th
+            2,1,5th period
+            2,5,moving to 6th
+            2,55,6th period
             `
             DayBstring = `
-            8,45,Condor Time day
-            9,35,1st period
-            9,40,moving to 2nd
-            10,25,2nd period
-            10,35,nutrition
-            10,40,settling to 3rd
-            11,25,3rd period
-            11,30,moving to Condor Time
-            12,5,Condor Time
-            12,10,moving to 4th
-            12,55,4th period
-            1,30,Lunch
-            1,35,passing to 5th
-            2,20,5th period
-            2,25,moving to 6th
-            3,10,6th period
+            8,30,Regular Tutorial Tu/Th
+            9,18,1st period
+            9,22,moving to 2nd
+            10,10,2nd period
+            10,20,nutrition
+            10,24,settling to tutorial
+            10,54,tutorial
+            10,58,moving to 3rd
+            11,46,3rd period
+            11,50,moving to 4th
+            12,38,4th period
+            1,11,lunch
+            1,15,settling to 5th
+            2,3,5th period
+            2,7,moving to 6th
+            2,55,6th period
             `
             DayCstring = `
-            8,45,(Wed)Early Release day
-            9,40,Adv. 1st period
-            9,45,moving to 2nd
-            10,25,2nd period
-            10,35,nutrition
-            10,40,settling to 3rd
-            11,20,3rd period
-            11,25,moving to 4th
-            12,5,4th period
-            12,40,Lunch
-            12,45,settling to 5th
-            1,25,5th period
-            1,30,moving to 6th
-            2,10,6th period
+            9,30,Wednesday
+            10,10,1st period
+            10,14,moving to 2nd
+            10,54,2nd period
+            11,4,nutrition
+            11,8,moving to advisory
+            11,28,advisory
+            12,8,3rd period
+            12,12,moving to 4th
+            12,52,4th period
+            1,27,lunch
+            1,31,settling to 5th
+            2,11,5th period
+            2,15,moving to 6th
+            2,55,6th period
             `
             DayDstring = `
-            8,45,Minimum day
-            10,5,Adv. + Period 1/2
-            10,25,nutrition
-            10,30,passing to P3/4
-            11,35,Period 3/4
-            11,40,passing to P5/6
-            12,45,Period 5/6
+            8,30,Early Release Tutorial
+            9,8,1st period
+            9,12,moving to 2nd
+            9,50,2nd period
+            10,0,nutrition
+            10,4,settling to tutorial
+            10,34,tutorial
+            10,38,moving to 3rd
+            11,16,3rd period
+            11,20,moving to 4th
+            11,58,4th period
+            12,31,lunch
+            12,35,settling to 5th
+            1,13,5th period
+            1,17,moving to 6th
+            1,55,6th period
             `
             DayEstring = `
-            
+            8,30,Minimum Day
+            9,3,1st period
+            9,7,moving to 2nd
+            9,40,2nd period
+            9,44,moving to 3rd
+            10,17,3rd perioid
+            10,21,moving to 4th
+            10,54,4th period
+            11,16,Nutrition 20min
+            11,20,settling to 5th
+            11,53,5th period
+            11,57,moving to 6th
+            12,30,6th period
             `
             DayFstring = `
-            
+            8,30,Early Release Advisory
+            9,10,1st period
+            9,14,moving to 2nd
+            9,54,2nd period
+            10,4,nutrition
+            10,8,settling to advisory
+            10,28,advisory
+            11,8,3rd period
+            11,12,moving to 4th
+            11,52,4th period
+            12,27,lunch
+            12,31,settling to 5th
+            1,11,5th period
+            1,15,moving to 6th
+            1,55,6th period
             `
 
             DayGstring = `
-            
+            8,30,Assembly
+            9,14,1st period
+            9,18,moving to 2nd
+            10,2,2nd period
+            10,12,nutrition
+            10,16,settling to advisory
+            10,24,advisory
+            11,8,3rd period
+            11,12,moving to 4th
+            11,56,4th period
+            12,31,lunch
+            12,35,settling to 5th
+            1,19,5th period
+            1,23,moving to Assembly
+            2,7,Assembly
+            2,11,moving to 6th
+            2,55,6th period
             `
 
             Yearstring = `
-            2022,8,9,TUE,D,68,,,1
+            2022,8,9,TUE,E,69,,,1
             2022,8,10,WED,C,67,,,2
             2022,8,11,THU,B,66,,,3
             2022,8,12,FRI,A,65,,,4
@@ -846,8 +910,8 @@
             2022,10,3,MON,A,65,,,56
             2022,10,4,TUE,B,66,,,57
             2022,10,5,WED,C,67,,,58
-            2022,10,6,THU,C,67,,,59
-            2022,10,7,FRI,C,67,Q,end of Q1,60
+            2022,10,6,THU,D,68,,,59
+            2022,10,7,FRI,F,70,Q,end of Q1,60
             2022,10,8,SAT,Z,90,,,61
             2022,10,9,SUN,Z,90,,,62
             2022,10,10,MON,A,65,,,63
@@ -865,7 +929,7 @@
             2022,10,22,SAT,Z,90,,,75
             2022,10,23,SUN,Z,90,,,76
             2022,10,24,MON,A,65,,,77
-            2022,10,25,TUE,C,67,,,78
+            2022,10,25,TUE,D,68,,,78
             2022,10,26,WED,C,67,,,79
             2022,10,27,THU,B,66,,,80
             2022,10,28,FRI,A,65,,,81
@@ -889,7 +953,7 @@
             2022,11,15,TUE,B,66,,,99
             2022,11,16,WED,C,67,,,100
             2022,11,17,THU,B,66,,,101
-            2022,11,18,FRI,D,68,,,102
+            2022,11,18,FRI,E,69,,,102
             2022,11,19,SAT,Z,90,R,Thanksgiving Break,103
             2022,11,20,SUN,Z,90,,,104
             2022,11,21,MON,Z,90,,,105
@@ -920,10 +984,10 @@
             2022,12,16,FRI,A,65,,,130
             2022,12,17,SAT,Z,90,,,131
             2022,12,18,SUN,Z,90,,,132
-            2022,12,19,MON,A,65,,,133
+            2022,12,19,MON,G,71,,,133
             2022,12,20,TUE,B,66,,,134
-            2022,12,21,WED,D,68,,,135
-            2022,12,22,THU,D,68,Q,end of Q2,136
+            2022,12,21,WED,E,69,,,135
+            2022,12,22,THU,E,69,Q,end of Q2,136
             2022,12,23,FRI,Z,90,R,Winter Break,137
             2022,12,24,SAT,Z,90,,,138
             2022,12,25,SUN,Z,90,,,139
@@ -1007,8 +1071,8 @@
             2023,3,13,MON,A,65,,,217
             2023,3,14,TUE,B,66,,,218
             2023,3,15,WED,C,67,,,219
-            2023,3,16,THU,C,67,,,220
-            2023,3,17,FRI,C,67,Q,end of Q3,221
+            2023,3,16,THU,D,68,,,220
+            2023,3,17,FRI,F,70,Q,end of Q3,221
             2023,3,18,SAT,Z,90,,,222
             2023,3,19,SUN,Z,90,,,223
             2023,3,20,MON,A,65,,,224
@@ -1019,7 +1083,7 @@
             2023,3,25,SAT,Z,90,,,229
             2023,3,26,SUN,Z,90,,,230
             2023,3,27,MON,A,65,,,231
-            2023,3,28,TUE,C,67,,,232
+            2023,3,28,TUE,D,68,,,232
             2023,3,29,WED,C,67,,,233
             2023,3,30,THU,B,66,,,234
             2023,3,31,FRI,Z,90,R,Spring Break,235
@@ -1083,9 +1147,9 @@
             2023,5,28,SUN,Z,90,,,293
             2023,5,29,MON,Z,90,,,294
             2023,5,30,TUE,B,66,,,295
-            2023,5,31,WED,D,68,,,296
-            2023,6,1,THU,D,68,,,297
-            2023,6,2,FRI,D,68,Q,end of Q4,298
+            2023,5,31,WED,E,69,,,296
+            2023,6,1,THU,E,69,,,297
+            2023,6,2,FRI,E,69,Q,end of Q4,298
             2023,6,3,SAT,Z,90,R,Summer Break,299
             2023,6,4,SUN,Z,90,,,300
             2023,6,5,MON,Z,90,,,301
