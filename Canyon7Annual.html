@@ -99,6 +99,7 @@
     </div>
     <div id="dvTable" class="text5"></div>
     
+    <p id="clocktickindicator">-</p>
     <h3>Resources:</h3>
     <p><a href="https://canyon.cv.k12.ca.us/apps/pages/index.jsp?uREC_ID=1381543&type=d&pREC_ID=2386364">Canyon daily bell schedule 2022-23</a></p>
     <p><a href="https://canyon.cv.k12.ca.us/apps/pages/index.jsp?uREC_ID=1381543&type=d&pREC_ID=1575508">Canyon monthly calendar</a></p>
@@ -110,8 +111,8 @@
         incorrect information being read on this webpage. Users 
         should exerecise their judgement and check for correctness 
         of schedules and dates on the school official websites.</p>
-    <p id="clocktickindicator">-</p>
-    <script>
+    
+    <script type="text/javascript">
 
 // Javascript program designed and written by Patrick Cheung
 // Dec 7th, 2022, in Castro Valley, CA
@@ -125,9 +126,13 @@
         Onedaystring = [];
         Nextdaystring = [];
         yearcount = 0;      //number of rows in YearArray, approx 365
+        todayindex = 0;
+        tindex_lastsecond = 0;  // will be updated in doClockTick
+        tableexists = 0;        // guard against first day is not school day
         nextbellindex = 0;
         Onedaycount = 0; // number of bell in BellArray
         Todaycount = 0;
+        Nextdaycount = 0;
         Secondsumnow = 0;
         bellday = 0;
         bellhour = 0;
@@ -143,8 +148,6 @@
             YeartoArrayFunction();  // return YearArrayTemp and yearcount
             
             doClockTick();  // setInterval does Delay first then action
-            
-            GenerateTable();
 
             setInterval(doClockTick, 1000);
         }
@@ -207,7 +210,6 @@
         }
 
         function doClockTick() {
-            todayindex = 0;
             let dayfound = 0;
             var testdate = "December 14, 2022 0:17:30";
             currentDate = new Date();
@@ -219,6 +221,9 @@
             year = currentDate.getFullYear();
             // create a composite yearmonthday value for today
             Year_today = (year * 100 + month) * 100 + dayofmonth;
+            // store up todayindex of last second, to be compared to the new todayindex
+            // to identify the crossing of midnight to the next day
+            tindex_lastsecond = todayindex;
             for (let i=0; i < (yearcount - 1); ++i){  // dayfound = 0 on the last day of this annual list
                 if (YearArray[i][1] === Year_today){
                     todayindex = i;         // todayindex can reach a max of one day before the last day of list
@@ -235,14 +240,23 @@
                 clearInterval();
             } else { 
                 // show clock tick on bottom of page
+                const formattedDate = currentDate.toLocaleString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric",
+                    hour: "numeric",
+                    minute: "2-digit",
+                    second: "2-digit"
+                });
                 if (secs % 2 == 0){
-                    var tickstring = "-|-";
+                    var tickstring = "-|-| " + formattedDate;
                 } else {
-                    var tickstring = "|-|";
+                    var tickstring = "|-|- " + formattedDate;
                 }
                 var  outputElement = document.getElementById("clocktickindicator");
                 outputElement.textContent = tickstring;
-            Secondsumnow = (hours * 60 + mins) * 60 + secs;
+            
+                Secondsumnow = (hours * 60 + mins) * 60 + secs;
             // load the bell schedule for day pointed to by todayindex
             switch(YearArray[todayindex][4]){
                 case 65:
@@ -421,6 +435,7 @@
             //
             if (YearArray[todayindex][4] == 90) {  // similar to Todaystring = 0
                     // display in large font NO SCHOOL
+                    // no school today
                     var timeString ="NO_SCHOOL";
                     document.getElementById("timePar").style.color = 'black';
                     document.getElementById("ctitle").style.color = 'black';
@@ -432,15 +447,18 @@
                     outputElement.textContent = titlestring;
 
                 if (YearArray[todayindex+1][4] == 90) {  // similar to Nextdaystring = 0
+                    // if tomorrow is also no school
                     // count and display below how many days till back to school  
                     var PurposeString = "Back to School in " + YearArray[todayindex][7] + " days";
                     var OutputElement = document.getElementById("whatsitfor");
                     OutputElement.textContent = PurposeString;
                 } else {
+                    // but if tomorrow school resumes, need to know when to wake up
                     // build Nextdaybellarray
                     Onedaystring = Nextdaystring;
                     DaytoArray();
                     NextdaybellArray = BellArray;
+                    Nextdaycount = Onedaycount;
                     // display message from DayXstring
                     var PurposeString = "See you tomorrow at " + NextdaybellArray[0][0] + ":" + NextdaybellArray[0][1] + " !";
                     var OutputElement = document.getElementById("whatsitfor");
@@ -482,6 +500,8 @@
                     Onedaystring = Nextdaystring;
                     DaytoArray();
                     NextdaybellArray = BellArray;
+                    Nextdaycount = Onedaycount;
+                    // event message after school and evenings
                     var PurposeString = "See you tomorrow at " + NextdaybellArray[0][0] + ":" + NextdaybellArray[0][1] + " !";
                     var OutputElement = document.getElementById("whatsitfor");
                     OutputElement.textContent = PurposeString;
@@ -492,9 +512,9 @@
                 }
             }
             
-            var timeString ="School Ends";
-            var outputElement = document.getElementById("tobreak");
-            outputElement.textContent = timeString;
+            // var timeString ="School Ends";
+            // var outputElement = document.getElementById("tobreak");
+            // outputElement.textContent = timeString;
 
             // First search backward from end of list to find the last R
             let i = yearcount - 1;  // this is the index to last day
@@ -554,7 +574,22 @@
                 var outputElement = document.getElementById("toendofQ");
                 outputElement.textContent = timeString;
             }
-            
+            // Below decides if a table of schedule will be created or deleted
+            if (todayindex != tindex_lastsecond){   // first run and across midnights
+                    if (YearArray[todayindex][4] == 90) {
+                        // delete the table if one already exists
+                        if (tableexists == 1){   // 
+                            var removeTab = document.getElementById("dvTable");
+                            var parentEl = removeTab.parentElement;
+                            parentEl.removeChild(removeTab);
+                            tableexists = 0;    // reset table indicator                   
+                        }   
+                        // if table doesn't exist and it's a holiday then do nothing
+                    } else {    // if today is indeed a school day then print schedule
+                        tableexists = 1;
+                        GenerateTable();        // this is the only place to call GenerateTable
+                    }
+                }
             } // else for dayfound != 0
         }
 
@@ -589,7 +624,7 @@
                 // BellArray column definition
                 // 0: tokens[0] hour
                 // 1: tokens[1] minute
-                // 2: 0 second -- schedules specified down to minutes only 
+                // 2: 0 second -- schedules pecified down to minutes only 
                 // 3: composite hourminutesecond on the schedule
                 // 4: event messages
                 // 5: Keyperiod -- all events excluding transitions
@@ -672,7 +707,14 @@
             var endhr = 0;
             var endmin = 0;
             var timespanstring = 0;
-            todayrows.push(["Time for today only", TodaybellArray[0][4] + " Schedule"]);
+            
+            const formattedDate = currentDate.toLocaleString("en-US", {
+                month: "short",
+                day: "numeric",
+                year: "numeric"
+            });
+
+            todayrows.push([formattedDate + " only", TodaybellArray[0][4] + " Schedule"]);
             
             for (i=0; i < Todaycount; ++i){
                 
@@ -717,6 +759,7 @@
         }
 
         function MakeBellSchedule(){
+            
             DayAstring = `
             8,45,Regular M/F
             9,50,Adv. 1st period
@@ -776,17 +819,6 @@
             11,40,passing to P5/6
             12,45,Period 5/6
             `
-            DayEstring = `
-            
-            `
-            DayFstring = `
-            
-            `
-
-            DayGstring = `
-            
-            `
-
             Yearstring = `
             2022,8,9,TUE,D,68,,,1
             2022,8,10,WED,C,67,,,2

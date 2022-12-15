@@ -99,6 +99,7 @@
     </div>
     <div id="dvTable" class="text5"></div>
     
+    <p id="clocktickindicator">-</p>
     <h3>Resources:</h3>
     <p><a href="https://creekside.cv.k12.ca.us/apps/pages/index.jsp?uREC_ID=1377072&type=d&pREC_ID=1559779">Creekside daily bell schedule 2022-23</a></p>
     <p><a href="https://creekside.cv.k12.ca.us/apps/pages/index.jsp?uREC_ID=1377072&type=d&pREC_ID=1577358">Creekside monthly calendar</a></p>
@@ -110,8 +111,7 @@
         incorrect information being read on this webpage. Users 
         should exerecise their judgement and check for correctness 
         of schedules and dates on the school official websites.</p>
-    <p id="clocktickindicator">-</p>    
-
+        
     <script type="text/javascript">
 
 // Javascript program designed and written by Patrick Cheung
@@ -150,10 +150,6 @@
             doClockTick();  // setInterval does Delay first then action
             
             setInterval(doClockTick, 1000);            
-        }
-
-        function doNothing(){
-            // a time delay function
         }
 
         function YeartoArrayFunction() {
