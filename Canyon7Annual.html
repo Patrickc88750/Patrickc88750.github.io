@@ -128,7 +128,7 @@
         yearcount = 0;      //number of rows in YearArray, approx 365
         todayindex = 0;
         tindex_lastsecond = 0;  // will be updated in doClockTick
-        tableexists = 0;        // guard against first day is not school day
+        nextbell_lastsec = 0;   // check for class transitions
         nextbellindex = 0;
         Onedaycount = 0; // number of bell in BellArray
         Todaycount = 0;
@@ -168,8 +168,31 @@
                 Lastdayb4break[i] = 0; 
                 Firstdayback[i] = 0;        // initialize all to zeros
                 Yearmonthday[i] = (parseInt(tokens[0])*100 + parseInt(tokens[1]))*100 + parseInt(tokens[2]);
-                YearArray.push([parseInt(tokens[8]), Yearmonthday[i], tokens[3], tokens[4], parseInt(tokens[5]), tokens[6], tokens[7], Daysbacktoschool[i], Lastdayb4break[i], Firstdayback[i]]);
-            }   // an entire YearArray ~365 rows is now formed
+                var whichweekday = "";
+                switch (tokens[3]){
+                    case "MON":
+                        whichweekday = "Monday";
+                        break;
+                    case "TUE": 
+                        whichweekday = "Tuesday";
+                        break;
+                    case "WED":
+                        whichweekday = "Wednesday";
+                        break;
+                    case "THU":
+                        whichweekday = "Thursday";
+                        break;
+                    case "FRI":
+                        whichweekday = "Friday";
+                        break;
+                    case "SAT":
+                        whichweekday = "Saturday";
+                        break;
+                    case "SUN":
+                        whichweekday = "Sunday";
+                    }
+                YearArray.push([parseInt(tokens[8]), Yearmonthday[i], whichweekday, tokens[4], parseInt(tokens[5]), tokens[6], tokens[7], Daysbacktoschool[i], Lastdayb4break[i], Firstdayback[i], tokens[0], tokens[1], tokens[2]]);
+           }   // an entire YearArray ~365 rows is now formed
             // YearArray column definition
             // 0: index, 1 to approx. 365 tokens[8]
             // 1: Yearmonthday composite date value
@@ -181,6 +204,9 @@
             // 7: Daysbacktoschool typical Tuesdays = 1 and typical Fridays = 3
             // 8: Lastdayb4break The last day before a break of one or more days = 1
             // 9: Firstdayback First day back to school after a break of one or more days = 1
+            // 10: Year (string)
+            // 11: Month (string)
+            // 12: Day (string)
             
             YearArray[0][7] = 1;    // the next day is a school day
             YearArray[yearcount-1][8] = 0;    // the next day is not a weekend/break
@@ -211,8 +237,12 @@
 
         function doClockTick() {
             let dayfound = 0;
-            var testdate = "December 14, 2022 0:17:30";
+            const offsetmillisecond = 0 * 60 *1000;
+            var testdate = "December 11, 2022 10:17:30";
             currentDate = new Date();
+            // var rawmillisecond = currentDate.getTime();
+            // rawmillisecond = rawmillisecond +  offsetmillisecond;
+            // currentDate = new Date(rawmillisecond);
             hours = currentDate.getHours();
             mins = currentDate.getMinutes();
             secs = currentDate.getSeconds();
@@ -470,6 +500,8 @@
                 DaytoArray();
                 TodaybellArray = BellArray;
                 Todaycount = Onedaycount;
+                nextbell_lastsec = nextbellindex;
+                // assumes the nextbellindex a second ago so as to compare for a change in class period
                 nextbellindex = Findnextbell(Secondsumnow);
                 if (nextbellindex != 99){   // midnight thru school hours before school ends
                     // display timer and event messages
@@ -574,22 +606,17 @@
                 var outputElement = document.getElementById("toendofQ");
                 outputElement.textContent = timeString;
             }
-            // Below decides if a table of schedule will be created or deleted
-            if (todayindex != tindex_lastsecond){   // first run and across midnights
-                    if (YearArray[todayindex][4] == 90) {
-                        // delete the table if one already exists
-                        if (tableexists == 1){   // 
-                            var removeTab = document.getElementById("dvTable");
-                            var parentEl = removeTab.parentElement;
-                            parentEl.removeChild(removeTab);
-                            tableexists = 0;    // reset table indicator                   
-                        }   
-                        // if table doesn't exist and it's a holiday then do nothing
-                    } else {    // if today is indeed a school day then print schedule
-                        tableexists = 1;
-                        GenerateTable();        // this is the only place to call GenerateTable
+            // Below decides if a table of schedule will be created or modified
+            if (YearArray[todayindex][4] == 90) {
+                    if (todayindex != tindex_lastsecond){   // if no school then only draw once whole day
+                        Generateblank();
+                        }
+                    } else {
+                        // else today is a school day
+                        if(todayindex != tindex_lastsecond || nextbell_lastsec != nextbellindex){
+                            GenerateTable();
+                        }
                     }
-                }
             } // else for dayfound != 0
         }
 
@@ -707,14 +734,21 @@
             var endhr = 0;
             var endmin = 0;
             var timespanstring = 0;
-            
-            const formattedDate = currentDate.toLocaleString("en-US", {
-                month: "short",
-                day: "numeric",
-                year: "numeric"
-            });
 
-            todayrows.push([formattedDate + " only", TodaybellArray[0][4] + " Schedule"]);
+            var formattedDate =YearArray[todayindex][2]  + " " + YearArray[todayindex][11] + "-" + YearArray[todayindex][12] + "-" + YearArray[todayindex][10];  
+            
+            todayrows.push([formattedDate, TodaybellArray[0][4] + " Schedule"]);
+            
+            var arrowindex = 99;
+            if (nextbellindex != 0 && nextbellindex != 99){
+            //  the for loop below skips i=0 because no need for an arrows anyway
+            var i = nextbellindex;  // i is at least = 1 
+            while(TodaybellArray[i][5] != 1){
+                i++;        // i can at most be = Todaycount-1
+            }
+            arrowindex = i; // Todaybellarray[arrowindex][5] is definitely = 1
+            }
+            
             
             for (i=0; i < Todaycount; ++i){
                 
@@ -730,9 +764,43 @@
 
                     timespanstring = starthr + ":" + startmin + " - " + endhr + ":" + endmin;
                     eventstring = TodaybellArray[i][4];
+                    if (i == arrowindex) {
+                        eventstring = eventstring + " " + " " + " <====";  // only occurs once
+                    }
                     todayrows.push([timespanstring, eventstring]);
                 }
             }
+            var table = document.createElement("TABLE");
+            table.border = "1";
+    
+            var columnCount = todayrows[0].length;
+    
+            var row = table.insertRow(-1);
+            for (var i = 0; i < columnCount; i++) {
+                var headerCell = document.createElement("TH");
+                headerCell.innerHTML = todayrows[0][i];
+                row.appendChild(headerCell);
+            }    
+        
+            for (var i = 1; i < todayrows.length; i++) {
+                row = table.insertRow(-1);
+                for (var j = 0; j < columnCount; j++) {
+                    var cell = row.insertCell(-1);
+                    cell.innerHTML = todayrows[i][j];
+                }
+            }
+    
+            var dvTable = document.getElementById("dvTable");
+            dvTable.innerHTML = "";
+            dvTable.appendChild(table);
+        }
+        
+        function Generateblank() {  // generate a blank schedule if not a school day
+            var todayrows = new Array();
+            
+            var formattedDate =YearArray[todayindex][2]  + " " + YearArray[todayindex][11] + "-" + YearArray[todayindex][12] + "-" + YearArray[todayindex][10];  
+            todayrows.push([formattedDate, "No School"]);
+            
             var table = document.createElement("TABLE");
             table.border = "1";
     
