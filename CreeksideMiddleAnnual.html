@@ -571,9 +571,9 @@
                     if (YearArray[i][3] != "Z"){
                         sdaycount++;}
                     i++;
-                    var timeString = sdaycount + " school days left to " + YearArray[i][6];
+                    var timeString = sdaycount + " school days left to " + YearArray[i][6] + " (inc. today)";
                     if (sdaycount == 1){
-                        var timeString = "One school day left to " + YearArray[i][6];     
+                        var timeString = YearArray[i][6] + " begins tomorrow!";     
                     }
                 }
                 var outputElement = document.getElementById("tobreak");
@@ -605,7 +605,7 @@
                     }
                     var timeString = sdaycount + " school days left to " + YearArray[i][6];
                     if (sdaycount == 1){
-                        var timeString = "One school days left to " + YearArray[i][6];
+                        var timeString = YearArray[i][6] + " is tomorrow!";
                     }
                 }
                 var outputElement = document.getElementById("toendofQ");
