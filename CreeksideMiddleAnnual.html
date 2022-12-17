@@ -237,12 +237,12 @@
 
         function doClockTick() {
             let dayfound = 0;
-            const offsetmillisecond = 0 * 60 *1000;
+            const offsetmillisecond = -542 * 60 *1000;
             var testdate = "December 11, 2022 10:17:30";
             currentDate = new Date();
-            // var rawmillisecond = currentDate.getTime();
-            // rawmillisecond = rawmillisecond +  offsetmillisecond;
-            // currentDate = new Date(rawmillisecond);
+            var rawmillisecond = currentDate.getTime();
+            rawmillisecond = rawmillisecond +  offsetmillisecond;
+            currentDate = new Date(rawmillisecond);
             hours = currentDate.getHours();
             mins = currentDate.getMinutes();
             secs = currentDate.getSeconds();
@@ -622,9 +622,9 @@
                         }
                     } else {
                         // else today is a school day
-                        if(todayindex != tindex_lastsecond || nextbell_lastsec != nextbellindex){
+                        // if(todayindex != tindex_lastsecond || nextbell_lastsec != nextbellindex){
                             GenerateTable();
-                        }
+                        // }
                     }
             } // else for dayfound != 0
         }
@@ -696,6 +696,7 @@
         function doOneDelta(){
             timeString = "  ";
             titlestring = "  ";
+            arrowstring = "  ";
             minutecomposite = Math.floor(deltacomposite/60);
             delsec = deltacomposite % 60;
             delhr = Math.floor(minutecomposite/60);
@@ -722,6 +723,7 @@
                 timeString = delhr + ":" + delmin + ":" + delsec;
                 titlestring = timeString;
             }
+            arrowstring = timeString;   // print inside the table
             var outputElement = document.getElementById("timePar");
             outputElement.textContent = timeString;
 
@@ -749,10 +751,12 @@
             todayrows.push([formattedDate, TodaybellArray[0][4] + " Schedule"]);
             
             var arrowindex = 99;
+            var parenth = 0;
             if (nextbellindex != 0 && nextbellindex != 99){
             //  the for loop below skips i=0 because no need for an arrows anyway
             var i = nextbellindex;  // i is at least = 1 
             while(TodaybellArray[i][5] != 1){
+                parenth = 1;    // the arrow timer will be in parenthesis
                 i++;        // i can at most be = Todaycount-1
             }
             arrowindex = i; // Todaybellarray[arrowindex][5] is definitely = 1
@@ -774,7 +778,13 @@
                     timespanstring = starthr + ":" + startmin + " - " + endhr + ":" + endmin;
                     eventstring = TodaybellArray[i][4];
                     if (i == arrowindex) {
-                        eventstring = eventstring + " " + " " + " <====";  // only occurs once
+                        if (parenth == 0){
+                            eventstring = eventstring + " " + " " + " <== " + arrowstring;  // only occurs once
+                        } else {
+                            // timer will be within parenthesis to indicate this is a transition
+                            eventstring = eventstring + " " + " " + " <== " + "(" + arrowstring + ")";  // only occurs once
+                        }
+                        
                     }
                     todayrows.push([timespanstring, eventstring]);
                 }
