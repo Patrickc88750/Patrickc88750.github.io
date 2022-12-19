@@ -774,7 +774,7 @@
 
             var formattedDate =YearArray[todayindex][2]  + " " + YearArray[todayindex][11] + "-" + YearArray[todayindex][12] + "-" + YearArray[todayindex][10];  
             
-            todayrows.push([formattedDate, TodaybellArray[0][4] + " Schedule"]);
+            todayrows.push([formattedDate, "minutes", TodaybellArray[0][4] + " Schedule"]);
             
             var arrowindex = 99;
             var parenth = 0;
@@ -796,6 +796,7 @@
                     startmin = TodaybellArray[i-1][1];
                     endhr = TodaybellArray[i][0];
                     endmin = TodaybellArray[i][1];
+                    var deltaminute = endhr * 60 + endmin - starthr * 60 - startmin;
                     if (starthr > 12){starthr = starthr - 12;}
                     if (startmin < 10){startmin = "0" + startmin;}
                     if (endhr > 12){endhr = endhr - 12;}
@@ -812,7 +813,7 @@
                         }
                         
                     }
-                    todayrows.push([timespanstring, eventstring]);
+                    todayrows.push([timespanstring, deltaminute, eventstring]);
                 }
             }
             var table = document.createElement("TABLE");
