@@ -101,6 +101,20 @@
     
     <p id="clocktickindicator">-</p>
     
+    <form class="text5" name="form1">
+        <p>
+            Day - - Hour - - Minute
+            <br>
+            <input type="text" name="offsetday" onblur="day_onblur()" value=0 size=5 maxlength=5>
+            <input type="text" name="offsethour" onblur="hour_onblur()" value=0 size=5 maxlength=5>
+            <input type="text" name="offsetmin" onblur="minute_onblur()" value=0 size=5 maxlength=5>
+            <br>
+            <br>
+            <input type="button" value="Include offset" name="offsetbutton" onclick="offset_onclick()">
+            <input type="button" value="Delete offset" name="deleteoffset" onclick="delete_onclick()">
+        </p>
+    </form>  
+    
     <h3>Resources:</h3>
     <p><a href="https://cvhs.cv.k12.ca.us/apps/bell_schedules/">CVHS all bell schedules</a></p>
     <p><a href="https://cvhs.cv.k12.ca.us/apps/pages/index.jsp?uREC_ID=1381367&type=d&pREC_ID=1563519">CVHS monthly calendar</a></p>
@@ -128,8 +142,8 @@
         </p>
     </form>  
     
-    
-/*
+*/   
+
 // Javascript program designed and written by Patrick Cheung
 // Dec 7th, 2022, in Castro Valley, CA
 //       document.body.style.backgroundImage = "url('./images/timer_background4.jpg')";
