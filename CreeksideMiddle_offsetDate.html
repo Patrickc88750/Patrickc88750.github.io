@@ -491,12 +491,14 @@
             if (YearArray[todayindex][4] == 90) {  // similar to Todaystring = 0
                     // display in large font NO SCHOOL
                     // no school today
-                    var timeString ="NO SCHOOL";
+                    var timeString ="NO SCHOOLO";
                     document.getElementById("timePar").style.color = 'black';
                     document.getElementById("ctitle").style.color = 'black';
                     document.getElementById("timePar").style.fontSize = "0.5em";
 				    var outputElement = document.getElementById("timePar");
                     outputElement.textContent = timeString;
+                    document.getElementById("timePar").style.fontSize = "1em";
+				    
                     var titlestring = "-" + YearArray[todayindex][7] + " days";
                     var  outputElement = document.getElementById("ctitle");
                     outputElement.textContent = titlestring;
@@ -578,31 +580,32 @@
                 }
             }
             
-            // var timeString ="School Ends";
-            // var outputElement = document.getElementById("tobreak");
-            // outputElement.textContent = timeString;
-
             // First search backward from end of list to find the last R
             let i = yearcount - 1;  // this is the index to last day
             while(YearArray[i][5] != "R"){
                 i = i - 1;
             }
-            lastRindex = i;
-            if (todayindex <= lastRindex){
-                // count school days until next R
+            lastRindex = i;     // The last break day of the year is found
+            if (todayindex < lastRindex){
+                // count school days until next R but not past summer break
                 let i = todayindex;
-                sdaycount = 0;
-                while (YearArray[i][5] != "R"){
+                if (YearArray[i][3] == "Z"){    // In case today is a first break day (R day)
+                    bdaycount = 0;
+                } else {bdaycount = 1;}
+                i++;        // start counting on the next day
+                if (YearArray[i][5] == "R"){
+                    var breakString = YearArray[i][6] + " begins tomorrow!";  
+                } else {
+                    while (YearArray[i][5] != "R"){ // looking for the real next R day
                     if (YearArray[i][3] != "Z"){
-                        sdaycount++;}
-                    i++;
-                    var timeString = sdaycount + " school days left to " + YearArray[i][6] + " (inc. today)";
-                    if (sdaycount == 1){
-                        var timeString = YearArray[i][6] + " begins tomorrow!";     
-                    }
+                        bdaycount++;}   // count school days up by one
+                        i++;    // move to the next calendar day before the break
+                    var breakString = bdaycount + " school days left to " + YearArray[i][6] + " (inc. today)";
+                    
+                }
                 }
                 var outputElement = document.getElementById("tobreak");
-                outputElement.textContent = timeString;
+                outputElement.textContent = breakString;
             } else {
                 var timeString = "Summer break has begun"
                 var outputElement = document.getElementById("tobreak");
@@ -636,7 +639,7 @@
                 var outputElement = document.getElementById("toendofQ");
                 outputElement.textContent = timeString;
             } else {
-                var timeString = "School Year has ended"
+                var timeString = "Please update this timer"
                 var outputElement = document.getElementById("toendofQ");
                 outputElement.textContent = timeString;
             }

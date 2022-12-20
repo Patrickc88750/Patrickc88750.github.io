@@ -74,16 +74,16 @@
 <body onload="doStartClock()">
 
     <div class="container1">
-      <div class="image1">
-        <img src="./images/CVEbear100.jpg">
+        <div class="image1">
+          <img src="./images/CVEbear100.jpg">
+        </div>
+        <div class="text1">
+          <h2>Castro Valley Elementary School</h2>
+          <h2>4/5th-grade bell timer</h2>
+        </div>
       </div>
-      <div class="text1">
-        <h2>Castro Valley Elementary School</h2>
-        <h2>4/5th-grade bell timer</h2>
-      </div>
-    </div>
-
-    <div class="text2">
+  
+      <div class="text2">
         <p id="timePar">
         </p>
     </div>
@@ -100,6 +100,7 @@
     <div id="dvTable" class="text5"></div>
     
     <p id="clocktickindicator">-</p>
+    
     <h3>Resources:</h3>
     <p><a href="https://4.files.edl.io/ec80/08/15/22/172154-f7ada390-a9f7-4e4d-9a62-858deb16b66f.pdf">CVE daily bell schedule 2022-23</a></p>
     <p><a href="https://cve.cv.k12.ca.us/apps/pages/index.jsp?uREC_ID=1374761&type=d&pREC_ID=1574004">CVE monthly calendar</a></p>
@@ -112,11 +113,26 @@
         of schedules and dates on the school official websites.</p>
         
     <script type="text/javascript">
-
+/*
+<form class="text5" name="form1">
+        <p>
+            Day - - Hour - - Minute
+            <br>
+            <input type="text" name="offsetday" onblur="day_onblur()" value=0 size=5 maxlength=5>
+            <input type="text" name="offsethour" onblur="hour_onblur()" value=0 size=5 maxlength=5>
+            <input type="text" name="offsetmin" onblur="minute_onblur()" value=0 size=5 maxlength=5>
+            <br>
+            <br>
+            <input type="button" value="Include offset" name="offsetbutton" onclick="offset_onclick()">
+            <input type="button" value="Delete offset" name="deleteoffset" onclick="delete_onclick()">
+        </p>
+    </form>  
+    
+    
+*/
 // Javascript program designed and written by Patrick Cheung
 // Dec 7th, 2022, in Castro Valley, CA
 //       document.body.style.backgroundImage = "url('./images/timer_background4.jpg')";
-//
 
         YearArray = [];
         TodaybellArray = [];
@@ -128,8 +144,8 @@
         yearcount = 0;      //number of rows in YearArray, approx 365
         todayindex = 0;     // where in the YearArray is today
         tindex_lastsecond = 0;  // will be updated in doClockTick
-        nextbell_lastsec = 0;   // check for class transitions
         nextbellindex = 0;
+        nextbell_lastsec = 0;   // check for class transitions
         Onedaycount = 0; // number of bell in BellArray
         Todaycount = 0;
         Nextdaycount = 0;
@@ -140,7 +156,22 @@
         bellsec = 0;
         timedelta = 0;
         deltacomposite = 0;
+        offsetmillisec = 0;
 
+        function day_onblur(){
+            var odaystring = document.form1.offsetday;
+            var odaynum = parseInt(odaystring.value);
+            if (odaystring.value == "" || isNaN(odaystring.value) == true){
+                window.status = "Hi, you need to enter a non-zero integer in the second window.";
+                }
+            else {
+            window.status = "Good. You entered an integer of " + odaynum;
+                }
+        }
+
+        function hour_onblur(){}
+        function minute_onblur(){}
+        
         function doStartClock() {
             
             MakeBellSchedule(); // Yearstring, DayXstring created
@@ -218,7 +249,7 @@
                 if (YearArray[i-1][4] != 90 && YearArray[i][4] == 90){
                     YearArray[i-1][8] = 1; 
                 }
-            }
+            }   // this section initialize column indexed 7, 8, and 9
 
             YearArray[yearcount-1][7] = 1;       // because there are four days first week of school August 2023
             for (let i=1; i < (yearcount - 1); ++i){    // the loop skips the first day
@@ -237,12 +268,7 @@
 
         function doClockTick() {
             let dayfound = 0;
-            const offsetmillisecond = 0 * 60 *1000;
-            var testdate = "December 11, 2022 10:17:30";
-            currentDate = new Date();
-            // var rawmillisecond = currentDate.getTime();
-            // rawmillisecond = rawmillisecond +  offsetmillisecond;
-            // currentDate = new Date(rawmillisecond);
+            currentDate = createcurrentDate();
             hours = currentDate.getHours();
             mins = currentDate.getMinutes();
             secs = currentDate.getSeconds();
@@ -466,12 +492,14 @@
             if (YearArray[todayindex][4] == 90) {  // similar to Todaystring = 0
                     // display in large font NO SCHOOL
                     // no school today
-                    var timeString ="NO_SCHOOL";
+                    var timeString ="NO SCHOOLO";
                     document.getElementById("timePar").style.color = 'black';
                     document.getElementById("ctitle").style.color = 'black';
-                    document.getElementById("timePar").style.fontSize = "0.75em";
+                    document.getElementById("timePar").style.fontSize = "0.5em";
 				    var outputElement = document.getElementById("timePar");
                     outputElement.textContent = timeString;
+                    document.getElementById("timePar").style.fontSize = "1em";
+				    
                     var titlestring = "-" + YearArray[todayindex][7] + " days";
                     var  outputElement = document.getElementById("ctitle");
                     outputElement.textContent = titlestring;
@@ -519,10 +547,10 @@
                     // after school ends, into the evening and to midnight
                     // now there are two possibilities: tomorrow is school day, or tomorrow is day off
                     // display school ends and CU messages
-                    var timeString ="School_Ends";
+                    var timeString ="School Ends";
                     document.getElementById("timePar").style.color = 'black';
                     document.getElementById("ctitle").style.color = 'black';
-                    document.getElementById("timePar").style.fontSize = "0.75em";
+                    document.getElementById("timePar").style.fontSize = "0.5em";
                     var outputElement = document.getElementById("timePar");
                     outputElement.textContent = timeString;
                     //
@@ -553,31 +581,32 @@
                 }
             }
             
-            // var timeString ="School Ends";
-            // var outputElement = document.getElementById("tobreak");
-            // outputElement.textContent = timeString;
-
             // First search backward from end of list to find the last R
             let i = yearcount - 1;  // this is the index to last day
             while(YearArray[i][5] != "R"){
                 i = i - 1;
             }
-            lastRindex = i;
-            if (todayindex <= lastRindex){
-                // count school days until next R
+            lastRindex = i;     // The last break day of the year is found
+            if (todayindex < lastRindex){
+                // count school days until next R but not past summer break
                 let i = todayindex;
-                sdaycount = 0;
-                while (YearArray[i][5] != "R"){
+                if (YearArray[i][3] == "Z"){    // In case today is a first break day (R day)
+                    bdaycount = 0;
+                } else {bdaycount = 1;}
+                i++;        // start counting on the next day
+                if (YearArray[i][5] == "R"){
+                    var breakString = YearArray[i][6] + " begins tomorrow!";  
+                } else {
+                    while (YearArray[i][5] != "R"){ // looking for the real next R day
                     if (YearArray[i][3] != "Z"){
-                        sdaycount++;}
-                    i++;
-                    var timeString = sdaycount + " school days left to " + YearArray[i][6] + " (inc. today)";
-                    if (sdaycount == 1){
-                        var timeString = YearArray[i][6] + " begins tomorrow!";     
-                    }
+                        bdaycount++;}   // count school days up by one
+                        i++;    // move to the next calendar day before the break
+                    var breakString = bdaycount + " school days left to " + YearArray[i][6] + " (inc. today)";
+                    
+                }
                 }
                 var outputElement = document.getElementById("tobreak");
-                outputElement.textContent = timeString;
+                outputElement.textContent = breakString;
             } else {
                 var timeString = "Summer break has begun"
                 var outputElement = document.getElementById("tobreak");
@@ -611,7 +640,7 @@
                 var outputElement = document.getElementById("toendofQ");
                 outputElement.textContent = timeString;
             } else {
-                var timeString = "School Year has ended"
+                var timeString = "Please update this timer"
                 var outputElement = document.getElementById("toendofQ");
                 outputElement.textContent = timeString;
             }
@@ -622,9 +651,9 @@
                         }
                     } else {
                         // else today is a school day
-                        if(todayindex != tindex_lastsecond || nextbell_lastsec != nextbellindex){
+                        // if(todayindex != tindex_lastsecond || nextbell_lastsec != nextbellindex){
                             GenerateTable();
-                        }
+                        // }
                     }
             } // else for dayfound != 0
         }
@@ -696,6 +725,7 @@
         function doOneDelta(){
             timeString = "  ";
             titlestring = "  ";
+            arrowstring = "  ";
             minutecomposite = Math.floor(deltacomposite/60);
             delsec = deltacomposite % 60;
             delhr = Math.floor(minutecomposite/60);
@@ -722,6 +752,7 @@
                 timeString = delhr + ":" + delmin + ":" + delsec;
                 titlestring = timeString;
             }
+            arrowstring = timeString;   // print inside the table
             var outputElement = document.getElementById("timePar");
             outputElement.textContent = timeString;
 
@@ -746,13 +777,15 @@
 
             var formattedDate =YearArray[todayindex][2]  + " " + YearArray[todayindex][11] + "-" + YearArray[todayindex][12] + "-" + YearArray[todayindex][10];  
             
-            todayrows.push([formattedDate, TodaybellArray[0][4] + " Schedule"]);
+            todayrows.push([formattedDate, "minutes", TodaybellArray[0][4] + " Schedule"]);
             
             var arrowindex = 99;
+            var parenth = 0;
             if (nextbellindex != 0 && nextbellindex != 99){
             //  the for loop below skips i=0 because no need for an arrows anyway
             var i = nextbellindex;  // i is at least = 1 
             while(TodaybellArray[i][5] != 1){
+                parenth = 1;    // the arrow timer will be in parenthesis
                 i++;        // i can at most be = Todaycount-1
             }
             arrowindex = i; // Todaybellarray[arrowindex][5] is definitely = 1
@@ -766,6 +799,7 @@
                     startmin = TodaybellArray[i-1][1];
                     endhr = TodaybellArray[i][0];
                     endmin = TodaybellArray[i][1];
+                    var deltaminute = endhr * 60 + endmin - starthr * 60 - startmin;
                     if (starthr > 12){starthr = starthr - 12;}
                     if (startmin < 10){startmin = "0" + startmin;}
                     if (endhr > 12){endhr = endhr - 12;}
@@ -774,9 +808,15 @@
                     timespanstring = starthr + ":" + startmin + " - " + endhr + ":" + endmin;
                     eventstring = TodaybellArray[i][4];
                     if (i == arrowindex) {
-                        eventstring = eventstring + " " + " " + " <====";  // only occurs once
+                        if (parenth == 0){
+                            eventstring = eventstring + " " + " " + " <== " + arrowstring;  // only occurs once
+                        } else {
+                            // timer will be within parenthesis to indicate this is a transition
+                            eventstring = eventstring + " " + " " + " <== " + "(" + arrowstring + ")";  // only occurs once
+                        }
+                        
                     }
-                    todayrows.push([timespanstring, eventstring]);
+                    todayrows.push([timespanstring, deltaminute, eventstring]);
                 }
             }
             var table = document.createElement("TABLE");
@@ -835,6 +875,28 @@
             dvTable.appendChild(table);
         }
 
+        function createcurrentDate(){
+            var currentDate = new Date();
+            var rawmillisecond = currentDate.getTime();
+            rawmillisecond = rawmillisecond +  offsetmillisec;
+            currentDate = new Date(rawmillisecond);
+            return currentDate;
+        }
+
+        function offset_onclick(){
+            oday = parseInt(document.form1.offsetday.value);
+            ohour = parseInt(document.form1.offsethour.value);
+            omin = parseInt(document.form1.offsetmin.value);
+            offsetmillisec = ((oday * 24 + ohour) * 60 + omin) * 60 * 1000;
+        }
+        
+        function delete_onclick(){
+            document.form1.offsetday.value = 0;
+            document.form1.offsethour.value = 0;
+            document.form1.offsetmin.value =0;
+            offsetmillisec = 0;
+        }
+        
         function MakeBellSchedule(){
             DayAstring = `
             8,10,Regular M-Tu-W-Th 
