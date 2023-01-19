@@ -103,7 +103,23 @@
     <div id="dvTable" class="text5"></div>
     
     <p id="clocktickindicator">-</p>
-   
+    
+    <form class="text5" name="form1">
+        <p>
+            Admin version
+            <br>
+            Day - - Hour - - Minute
+            <br>
+            <input type="text" name="offsetday" onblur="day_onblur()" value=0 size=5 maxlength=5>
+            <input type="text" name="offsethour" onblur="hour_onblur()" value=0 size=5 maxlength=5>
+            <input type="text" name="offsetmin" onblur="minute_onblur()" value=0 size=5 maxlength=5>
+            <br>
+            <br>
+            <input type="button" value="Include offset" name="offsetbutton" onclick="offset_onclick()">
+            <input type="button" value="Delete offset" name="deleteoffset" onclick="delete_onclick()">
+        </p>
+    </form>  
+    
     <h3>Resources:</h3>
     <p><a href="https://creekside.cv.k12.ca.us/apps/pages/index.jsp?uREC_ID=1377072&type=d&pREC_ID=1559779">Creekside daily bell schedule 2022-23</a></p>
     <p><a href="https://creekside.cv.k12.ca.us/apps/pages/index.jsp?uREC_ID=1377072&type=d&pREC_ID=1577358">Creekside monthly calendar</a></p>
@@ -147,27 +163,7 @@
     <div id="YearCalendar" class="text5"></div>
 
     <script type="text/javascript">
-/*  place after clocktickindicator
-<form class="text5" name="form1">
-        <p>
-            Admin version
-            <br>
-            Day - - Hour - - Minute
-            <br>
-            <input type="text" name="offsetday" onblur="day_onblur()" value=0 size=5 maxlength=5>
-            <input type="text" name="offsethour" onblur="hour_onblur()" value=0 size=5 maxlength=5>
-            <input type="text" name="offsetmin" onblur="minute_onblur()" value=0 size=5 maxlength=5>
-            <br>
-            <br>
-            <input type="button" value="Include offset" name="offsetbutton" onclick="offset_onclick()">
-            <input type="button" value="Delete offset" name="deleteoffset" onclick="delete_onclick()">
-        </p>
-    </form>  
-  
     
-
-
-*/
 // Javascript program designed and written by Patrick Cheung
 // Dec 7th, 2022, in Castro Valley, CA
 //       document.body.style.backgroundImage = "url('./images/timer_background4.jpg')";
@@ -205,13 +201,13 @@
             // MakeBellSchedule(); // Yearstring, DayXstring created
           
             YeartoArrayFunction();  // return YearArrayTemp and yearcount
-/*
+
             Checkscheduleunicodematch();    // The two counts must match
             
             printallschedules();
 
             printyearcalendar();
-*/            
+            
             doClockTick();  // setInterval does Delay first then action
             
             setInterval(doClockTick, 1000);       

@@ -72,18 +72,18 @@
     </style>
 </head>
 
-<script type="text/javascript" src="Creekside_MakeBell.html"></script>
+<script type="text/javascript" src="CVHS_MakeBell.html"></script>
 
 <body onload="doStartClock()">
 
     <div class="container1">
-      <div class="image1">
-        <img src="./images/Wildcats100.gif">
-      </div>
-      <div class="text1">
-        <h2>Creekside Middle School</h2>
-        <h2>6/7/8th-grade bell timer</h2>
-      </div>
+        <div class="image1">
+            <img src="./images/Trojans100.jpg">
+        </div>
+        <div class="text1">
+            <h2>Castro Valley High School</h2>
+            <h2>9/10/11/12th-grade bell timer</h2>
+        </div>
     </div>
 
     <div class="text2">
@@ -103,13 +103,28 @@
     <div id="dvTable" class="text5"></div>
     
     <p id="clocktickindicator">-</p>
-   
+    
+    <form class="text5" name="form1">
+        <p>
+            Admin version
+            <br>
+            Day - - Hour - - Minute
+            <br>
+            <input type="text" name="offsetday" onblur="day_onblur()" value=0 size=5 maxlength=5>
+            <input type="text" name="offsethour" onblur="hour_onblur()" value=0 size=5 maxlength=5>
+            <input type="text" name="offsetmin" onblur="minute_onblur()" value=0 size=5 maxlength=5>
+            <br>
+            <br>
+            <input type="button" value="Include offset" name="offsetbutton" onclick="offset_onclick()">
+            <input type="button" value="Delete offset" name="deleteoffset" onclick="delete_onclick()">
+        </p>
+    </form>  
+    
     <h3>Resources:</h3>
-    <p><a href="https://creekside.cv.k12.ca.us/apps/pages/index.jsp?uREC_ID=1377072&type=d&pREC_ID=1559779">Creekside daily bell schedule 2022-23</a></p>
-    <p><a href="https://creekside.cv.k12.ca.us/apps/pages/index.jsp?uREC_ID=1377072&type=d&pREC_ID=1577358">Creekside monthly calendar</a></p>
-    <p><a href="https://drive.google.com/file/d/1jOBnSvQN-vzocUNM4lk9YYS5Qoro3WAC/view">Creekside early release/minimum day schedule</a></p>
+    <p><a href="https://cvhs.cv.k12.ca.us/apps/bell_schedules/">CVHS all bell schedules</a></p>
+    <p><a href="https://cvhs.cv.k12.ca.us/apps/pages/index.jsp?uREC_ID=1381367&type=d&pREC_ID=1563519">CVHS monthly calendar</a></p>
     <p><a href="https://drive.google.com/file/d/1u-HJrEZFCEn55S9txb-kb9CS4jPYgHtD/view">Castro Valley CVUSD annual calendar</a></p>
-    <p><a href="https://creekside.cv.k12.ca.us/">Creekside Middle School official website</a></p>
+    <p><a href="https://cvhs.cv.k12.ca.us/">Castro Valley High School official website</a></p>
     <p>Disclaimer: This website is not responsible for any consequences 
         such as absence, tardiness, or missing homeworks due to
         incorrect information being read on this webpage. Users 
@@ -147,27 +162,7 @@
     <div id="YearCalendar" class="text5"></div>
 
     <script type="text/javascript">
-/*  place after clocktickindicator
-<form class="text5" name="form1">
-        <p>
-            Admin version
-            <br>
-            Day - - Hour - - Minute
-            <br>
-            <input type="text" name="offsetday" onblur="day_onblur()" value=0 size=5 maxlength=5>
-            <input type="text" name="offsethour" onblur="hour_onblur()" value=0 size=5 maxlength=5>
-            <input type="text" name="offsetmin" onblur="minute_onblur()" value=0 size=5 maxlength=5>
-            <br>
-            <br>
-            <input type="button" value="Include offset" name="offsetbutton" onclick="offset_onclick()">
-            <input type="button" value="Delete offset" name="deleteoffset" onclick="delete_onclick()">
-        </p>
-    </form>  
-  
     
-
-
-*/
 // Javascript program designed and written by Patrick Cheung
 // Dec 7th, 2022, in Castro Valley, CA
 //       document.body.style.backgroundImage = "url('./images/timer_background4.jpg')";
@@ -205,13 +200,13 @@
             // MakeBellSchedule(); // Yearstring, DayXstring created
           
             YeartoArrayFunction();  // return YearArrayTemp and yearcount
-/*
+
             Checkscheduleunicodematch();    // The two counts must match
             
             printallschedules();
 
             printyearcalendar();
-*/            
+            
             doClockTick();  // setInterval does Delay first then action
             
             setInterval(doClockTick, 1000);       
