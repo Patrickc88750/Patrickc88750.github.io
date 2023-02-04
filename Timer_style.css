@@ -1,0 +1,56 @@
+.container1 {
+    display: flex;
+    align-items: center;
+    justify-content: left
+  }
+  img {
+    max-width:100%
+  }
+  .image1 {
+    flex-basis: 15%
+  }
+  .text1 {
+    text-align: left;
+    font-size: 1em;
+    padding-left: 10px;
+  }
+  .text2{
+    height: 130pt;
+    font-weight: normal;
+    overflow:hidden;
+    line-height:1px;
+    font-size: 8em;
+    font-family: 'Courier New', Courier, monospace;
+    text-align: left; 
+    padding-left: 10px;
+}
+.text3 {
+    font-size: 4em;
+    text-align: left;
+    font-weight: bold;
+    padding-left: 10px;
+  }
+  .text4 {
+    font-size: 2em;
+    text-align: left;
+    font-weight: bold;
+    padding-left: 10px;
+  }
+  .text5 {
+    font-size: 1.5em;
+    text-align: center;
+    padding-left: 10px;
+    margin-bottom: 40px;
+  }
+  .menulabel {
+    font-size: 1.5em;
+    display: inline-block;
+    text-align: right;
+    width:7em;
+    margin: 10px;
+  }
+  .menuinput {
+    font-size: 1.5em;
+    text-align: center;
+    margin: 10px;
+  }
