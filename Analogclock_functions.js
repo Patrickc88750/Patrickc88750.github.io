@@ -8,15 +8,21 @@ function drawTime(ctx, radius, timetoshow) {
   hour = (hour*Math.PI/6) +
   (minute*Math.PI/(6*60)) +
   (second*Math.PI/(360*60));
-  drawHand(ctx, hour, radius*0.5, radius*0.07);
+  drawHand(ctx, hour, radius*0.5, radius*0.07, 'black');
 
   // Minute hand
   minute = (minute*Math.PI/30) + (second*Math.PI/(30*60));
-  drawHand(ctx, minute, radius*0.8, radius*0.07);
+  drawHand(ctx, minute, radius*0.8, radius*0.07, 'black');
+  drawHand(ctx, minute, radius*0.78, radius*0.03, 'red')
 
   // Second hand
   second = (second*Math.PI/30);
-  drawHand(ctx, second, radius*0.9, radius*0.02);
+  drawHand(ctx, second, radius*0.9, radius*0.02, 'black');
+
+  ctx.beginPath();
+  ctx.arc(0, 0, radius*0.06, 0, 2*Math.PI);
+  ctx.fillStyle = 'red';
+  ctx.fill();
 }
 
 function drawFace(ctx, radius) {
@@ -63,13 +69,18 @@ function drawRedDot(ctx, radius, minute) {
   var reddotradiusfactor = 0.8
   var xoffset = radius * reddotradiusfactor * Math.cos((minute/60)*(-2)*Math.PI+Math.PI/2);
   var yoffset = (-1) * radius * reddotradiusfactor * Math.sin((minute/60)*(-2)*Math.PI+Math.PI/2);
+  ctx.fillStyle = 'black';
+  ctx.beginPath();
+  ctx.arc(xoffset, yoffset, radius*0.1, 0, 2 * Math.PI, true);
+  ctx.fill();
   ctx.fillStyle = 'red';
   ctx.beginPath();
-  ctx.arc(xoffset, yoffset, radius/15, 0, 2 * Math.PI, true);
+  ctx.arc(xoffset, yoffset, radius*0.06, 0, 2 * Math.PI, true);
   ctx.fill();
 }
 
-function drawHand(ctx, pos, length, width) {
+function drawHand(ctx, pos, length, width, strokecolor) {
+  ctx.strokeStyle = strokecolor;
   ctx.beginPath();
   ctx.lineWidth = width;
   ctx.moveTo(0,0);
