@@ -85,7 +85,7 @@ function Checkscheduleunicodematch(){   // there must be at least one schedule A
     schedulecount = maxicode - 65;
     // display status
     if (unicodecount == schedulecount){
-        var StatusString = "Counts match correctly";
+        var StatusString = "Schedule count matches calendar";
         var OutputElement = document.getElementById("Matchstatus");
         OutputElement.textContent = StatusString;
     }
