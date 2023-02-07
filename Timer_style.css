@@ -54,3 +54,8 @@
     text-align: center;
     margin: 10px;
   }
+  #clock {
+    width: 400px;
+    height: 400px;
+    margin: 50px auto;
+  }

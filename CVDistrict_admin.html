@@ -27,10 +27,7 @@
     <meta name="msapplication-square310x310logo" content="mstile-310x310.png" />
     
     <link rel="stylesheet" href="Timer_style.css">
-    <script src="Make_logoandname.js"></script>
-    <script src="Creekside_MakeBell.js"></script>
-    <script src="Calendar_print.js"></script>
-    <script src="Make_countdown.js"></script>
+    <script src="CVCreekside_MakeBell.js"></script>
 </head>
 
 <body onload="doStartClock()">
@@ -55,6 +52,8 @@
     <div class="text4">
         <p id="toendofQ">Days left to end of a quarter</p>
     </div>
+
+    <canvas id="clock"></canvas>
     
     <div id="dvTable" class="text5"></div>
     
@@ -102,10 +101,13 @@
     <div id="Schedule_Y" class="text5"></div> 
     <div id="YearCalendar" class="text5"></div>
 
+    <script src="All_Functions.js"></script>
+    
     <script type="text/javascript">
     
 // Javascript program designed and written by Patrick Cheung
 // Dec 7th, 2022, in Castro Valley, CA
+// Any questions please email pcheung@cv.k12.ca.us
 //       document.body.style.backgroundImage = "url('./images/timer_background4.jpg')";
 
         adminmode = 1;
@@ -136,59 +138,20 @@
         DayZstring = 0;     // ascii code 90 = Z means no school
         schedulecount = 0;  // how many day schedules in this school
         unicodecount = 0;   // how many unicodes less than 90 in Year calendar
+        currentDate = 0;    // make this global for analog clock to access
 
-        InitializeAllInputs();
+        const canvas = document.getElementById('clock');
+        canvas.width = 400;
+        canvas.height = 400;
+        const ctx = canvas.getContext('2d');
+        radius = canvas.width / 2;
+        bellminute = 0;  // 0 to 59
 
-        Do_schoolnamelines('rightfield', Schoolname_string);
-
-        Do_resourcelines('resourcefield', Resources_string);
-
-        Do_displaylogo('leftfield', Schoollogo_string);
-
-        if (adminmode ==1){Do_offsetform('offsetinputs');}
-
-        function doStartClock() {
-            
-            // MakeBellSchedule(); // Yearstring, DayXstring created
-          
-            YeartoArrayFunction();  // return YearArrayTemp and yearcount
-
-            if (adminmode == 1){
-                Checkscheduleunicodematch();    // The two counts must match
-                
-                printallschedules();
-
-                printyearcalendar();
-            }
-            
-            doClockTick();  // setInterval does Delay first then action
-            
-            setInterval(doClockTick, 1000);       
-            
-            }
+        ctx.translate(radius, radius);
+        radius = radius * 0.90;
 
         
         
-        function offset_onclick(){
-            oday = parseInt(document.form1.offsetday.value);
-            ohour = parseInt(document.form1.offsethour.value);
-            omin = parseInt(document.form1.offsetmin.value);
-            offsetmillisec = ((oday * 24 + ohour) * 60 + omin) * 60 * 1000;
-        }
-        
-        function delete_onclick(){
-            document.form1.offsetday.value = 0;
-            document.form1.offsethour.value = 0;
-            document.form1.offsetmin.value =0;
-            offsetmillisec = 0;
-        }
-        
-        function day_onblur(){}
-
-        function hour_onblur(){}
-
-        function minute_onblur(){}
-
         
         
         

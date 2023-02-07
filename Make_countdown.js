@@ -130,19 +130,19 @@ function YeartoArrayFunction() {    // output is YearArray, a large matrix
 }
 
 function doClockTick() {
-    let dayfound = 0;
-    currentDate = createcurrentDate();
-    hours = currentDate.getHours();
-    mins = currentDate.getMinutes();
-    secs = currentDate.getSeconds();
-    dayofmonth = currentDate.getDate();
-    month = currentDate.getMonth() + 1; // getMonth results range 0 to 11
-    year = currentDate.getFullYear();
+    var dayfound = 0;
+    currentDate = createcurrentDate();  // includes offset, if any
+    var hours = currentDate.getHours();
+    var mins = currentDate.getMinutes();
+    var secs = currentDate.getSeconds();
+    var dayofmonth = currentDate.getDate();
+    var month = currentDate.getMonth() + 1; // getMonth results range 0 to 11
+    var year = currentDate.getFullYear();
     // create a composite yearmonthday value for today
-    Year_today = (year * 100 + month) * 100 + dayofmonth;
+    var Year_today = (year * 100 + month) * 100 + dayofmonth;
     // store up todayindex of last second, to be compared to the new todayindex
     // to identify the crossing of midnight to the next day
-    tindex_lastsecond = todayindex;
+    var tindex_lastsecond = todayindex;
     for (let i=0; i < (yearcount - 1); ++i){  // dayfound = 0 on the last day of this annual list
         if (YearArray[i][1] === Year_today){
             todayindex = i;         // todayindex can reach a max of one day before the last day of list
@@ -206,6 +206,8 @@ function doClockTick() {
     if (YearArray[todayindex][4] == 90) {  // similar to Todaystring = 0
             // display in large font NO SCHOOL
             // no school today
+            // drawClock without dot
+            drawClock();
             var timeString ="BREAK";
             document.getElementById("timePar").style.color = 'black';
             document.getElementById("ctitle").style.color = 'black';
@@ -257,10 +259,15 @@ function doClockTick() {
         if (nextbellindex != 99){   // midnight thru school hours before school ends
             // display timer and event messages
             doOneDelta();
+            // draw Clock with red dot
+            bellminute = BellArray[nextbellindex][3];   // minute value of next bell
+            drawClockreddot(bellminute);
         } else {
             // after school ends, into the evening and to midnight
             // now there are two possibilities: tomorrow is school day, or tomorrow is day off
             // display school ends and CU messages
+            // draw Clock without dot
+            drawClock();
             var timeString ="PM";
             document.getElementById("timePar").style.color = 'black';
             document.getElementById("ctitle").style.color = 'black';

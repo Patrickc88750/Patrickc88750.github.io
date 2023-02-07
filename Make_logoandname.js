@@ -95,3 +95,22 @@ function makeinlineElement(valueText, nameText, onclickText) {
     inputElement.setAttribute("name", nameText);
     return inputElement;
 }
+function offset_onclick(){
+    oday = parseInt(document.form1.offsetday.value);
+    ohour = parseInt(document.form1.offsethour.value);
+    omin = parseInt(document.form1.offsetmin.value);
+    offsetmillisec = ((oday * 24 + ohour) * 60 + omin) * 60 * 1000;
+}
+
+function delete_onclick(){
+    document.form1.offsetday.value = 0;
+    document.form1.offsethour.value = 0;
+    document.form1.offsetmin.value =0;
+    offsetmillisec = 0;
+}
+
+function day_onblur(){}
+
+function hour_onblur(){}
+
+function minute_onblur(){}
