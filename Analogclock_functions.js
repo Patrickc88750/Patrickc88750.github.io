@@ -20,7 +20,7 @@ function drawTime(ctx, radius, timetoshow) {
   drawHand(ctx, second, radius*0.9, radius*0.02, 'black');
 
   ctx.beginPath();
-  ctx.arc(0, 0, radius*0.06, 0, 2*Math.PI);
+  ctx.arc(0, 0, radius*0.07, 0, 2*Math.PI);
   ctx.fillStyle = 'red';
   ctx.fill();
 }
@@ -66,17 +66,30 @@ function drawNumbers(ctx, radius) {
 }
 
 function drawRedDot(ctx, radius, minute) {
-  var reddotradiusfactor = 0.8
+  var reddotradiusfactor = 0.95;
+  var angleminblack = (minute-0.9) * Math.PI/30 - Math.PI/2;
+  var anglemaxblack = (minute+0.9) * Math.PI/30 - Math.PI/2;
+  var anglemin = (minute-0.75) * Math.PI/30 - Math.PI/2;
+  var anglemax = (minute+0.75) * Math.PI/30 - Math.PI/2;
+  var angle = minute * Math.PI/30;
+  var reverseangle = angle - Math.PI;
   var xoffset = radius * reddotradiusfactor * Math.cos((minute/60)*(-2)*Math.PI+Math.PI/2);
   var yoffset = (-1) * radius * reddotradiusfactor * Math.sin((minute/60)*(-2)*Math.PI+Math.PI/2);
-  ctx.fillStyle = 'black';
+  var xoffsetshort = xoffset * 0.98;
+  var yoffsetshort = yoffset * 0.98;
+  ctx.strokeStyle = 'black';  // draw the top section of capital T letter
+  ctx.lineWidth = radius*0.07;
+  ctx.beginPath(); 
+  ctx.arc(0, 0, radius*0.92, angleminblack, anglemaxblack, false);
+  ctx.stroke();
+  drawTail(ctx, reverseangle, xoffset, yoffset, -0.78*radius, radius*0.07, 'black');
+  ctx.strokeStyle = 'red';  // draw the inner red part of top section of capital T letter
+  ctx.lineWidth = radius * 0.03;
   ctx.beginPath();
-  ctx.arc(xoffset, yoffset, radius*0.1, 0, 2 * Math.PI, true);
-  ctx.fill();
-  ctx.fillStyle = 'red';
-  ctx.beginPath();
-  ctx.arc(xoffset, yoffset, radius*0.06, 0, 2 * Math.PI, true);
-  ctx.fill();
+  ctx.arc(0, 0, radius*0.92, anglemin, anglemax, false);
+  ctx.stroke();
+  drawTail(ctx, reverseangle, xoffsetshort, yoffsetshort, -0.80*radius, radius*0.03, 'red');
+  
 }
 
 function drawHand(ctx, pos, length, width, strokecolor) {
@@ -84,6 +97,18 @@ function drawHand(ctx, pos, length, width, strokecolor) {
   ctx.beginPath();
   ctx.lineWidth = width;
   ctx.moveTo(0,0);
+  ctx.rotate(pos);
+  ctx.lineTo(0, -length);
+  ctx.stroke();
+  ctx.rotate(-pos);
+}
+
+function drawTail(ctx, pos, xoffset, yoffset, length, width, strokecolor) {
+  ctx.strokeStyle = strokecolor;
+  ctx.beginPath();
+  ctx.lineWidth = width;
+  ctx.moveTo(0, 0);
+  ctx.moveTo(xoffset, yoffset);
   ctx.rotate(pos);
   ctx.lineTo(0, -length);
   ctx.stroke();
