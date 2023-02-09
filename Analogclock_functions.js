@@ -3,7 +3,12 @@ function drawTime(ctx, radius, timetoshow) {
   var minute = timetoshow.getMinutes();
   var second = timetoshow.getSeconds();
 
-  // Hour hand
+  ctx.beginPath();
+  ctx.arc(0, 0, radius*0.1, 0, 2*Math.PI);
+  ctx.fillStyle = 'black';
+  ctx.fill();
+
+// Hour hand
   hour = hour%12;
   hour = (hour*Math.PI/6) +
   (minute*Math.PI/(6*60)) +
@@ -27,11 +32,21 @@ function drawTime(ctx, radius, timetoshow) {
 
 function drawFace(ctx, radius) {
   var grad;
-
+  /*ctx.fillStyle = 'white';
   ctx.beginPath();
   ctx.arc(0, 0, radius, 0, 2*Math.PI);
-  ctx.fillStyle = 'white';
   ctx.fill();
+  */
+  // background image for the clock
+  ctx.beginPath();
+  ctx.arc(0, 0, radius*1, 0, 2*Math.PI);
+  ctx.save();
+  ctx.clip();
+  var bgImg = new Image();
+  bgImg.src = imagelink;
+  ctx.filter='contrast(33%) brightness(150%)';
+  ctx.drawImage(bgImg, -radius, -radius, canvas.width, canvas.height);
+  ctx.restore();
 
   grad = ctx.createRadialGradient(0,0,radius*0.95, 0,0,radius*1.05);
   grad.addColorStop(0, '#333');
@@ -41,18 +56,15 @@ function drawFace(ctx, radius) {
   ctx.lineWidth = radius*0.1;
   ctx.stroke();
 
-  ctx.beginPath();
-  ctx.arc(0, 0, radius*0.1, 0, 2*Math.PI);
-  ctx.fillStyle = '#333';
-  ctx.fill();
-}
+  }
 
 function drawNumbers(ctx, radius) {
   var ang;
   var num;
-  ctx.font = radius*0.15 + "px arial";
+  ctx.font = "bold " + radius*0.15 + "px arial";
   ctx.textBaseline="middle";
   ctx.textAlign="center";
+  ctx.fillStyle = "black"
   for(num = 1; num < 13; num++){
     ang = num * Math.PI / 6;
     ctx.rotate(ang);
@@ -113,4 +125,17 @@ function drawTail(ctx, pos, xoffset, yoffset, length, width, strokecolor) {
   ctx.lineTo(0, -length);
   ctx.stroke();
   ctx.rotate(-pos);
+}
+
+function drawClock() {
+  drawFace(ctx, radius);
+  drawNumbers(ctx, radius);
+  drawTime(ctx, radius, currentDate); // currentDate is global
+}
+
+function drawClockreddot(bellminute) {
+  drawFace(ctx, radius);
+  drawNumbers(ctx, radius);
+  drawRedDot(ctx, radius, bellminute);
+  drawTime(ctx, radius, currentDate);
 }

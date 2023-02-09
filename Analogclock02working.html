@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    #clock {
+      width: 600px;
+      height: 600px;
+      margin: 50px auto;
+    }
+  </style>
+  <script src="Analogclock_functions.js"></script>
+</head>
+<body>
+  <canvas id="clock"></canvas>
+
+  <script>
+    const canvas = document.getElementById('clock');
+    canvas.width = 400;
+    canvas.height = 400;
+    const ctx = canvas.getContext('2d');
+    var radius0 = canvas.width / 2;
+    bellminute = 15;  // 0 to 59
+    const Schoollogo_string = "./images/Wildcats100.gif";
+    imagelink = Schoollogo_string.trim();
+    ctx.translate(radius0, radius0);
+    var radius = radius0 * 0.90;
+
+    
+  // ctx.filter = "saturation(100%) contrast(100%) brightness(100%)";
+  // ctx.save();
+   
+    setInterval(drawClock, 1000);
+
+    function drawClock() {
+      var timetoshow = new Date()
+      drawFace(ctx, radius);
+      drawNumbers(ctx, radius);
+      drawRedDot(ctx, radius, bellminute);
+      drawTime(ctx, radius, timetoshow);
+      
+    }
+
+    
+    
+  </script>
+
+</body>
+
+</html>
