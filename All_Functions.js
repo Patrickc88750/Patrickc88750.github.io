@@ -3,7 +3,7 @@ script1.src = 'Make_logoandname.js';
 document.head.appendChild(script1);
 
 var script2 = document.createElement('script');
-script2.src = 'Calendar_print.js';
+script2.src = 'Make_Calendar.js';
 document.head.appendChild(script2);
 
 var script3 = document.createElement('script');
@@ -15,5 +15,5 @@ script4.src = 'Make_doStartClock.js';
 document.head.appendChild(script4);
 
 var script5 = document.createElement('script');
-script5.src = 'Analogclock_functions.js';
+script5.src = 'Make_Analogclock.js';
 document.head.appendChild(script5);
