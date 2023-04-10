@@ -36,12 +36,21 @@
     font-weight: bold;
     padding-left: 10px;
   }
+  
+  .menuheading {
+    font-size: 1.5em;
+    text-align: left;
+    font-weight: bold;
+  }
+
   .text5 {
     font-size: 1.5em;
     text-align: center;
     padding-left: 10px;
     margin-bottom: 40px;
   }
+
+  
   .menulabel {
     font-size: 1.5em;
     display: inline-block;
@@ -59,3 +68,70 @@
     height: 600px;
     margin: 50px auto;
   }
+
+input[name=weeknumoffset]::-webkit-inner-spin-button,
+input[name=weeknumoffset]::-webkit-outer-spin-button {
+  display: none;
+}
+
+.down-arrow,
+.up-arrow {
+  width: 90px;
+  height: 70px;
+  background-color: white;
+  background-repeat: no-repeat;
+  background-size: 70px 70px;
+  border: none;
+}
+
+.up-arrow {
+  background-image: url('images/up-arrow.png');
+}
+
+.down-arrow {
+  background-image: url('images/down-arrow.png');
+}
+input[name=weeknumoffset] {
+  font-size: 3em;
+  padding: 0.5em;
+  box-sizing: border-box;
+}
+
+#WeeklyTable td.red-column {
+  color: red;
+  border-color: red;
+}
+
+#WeeklyTable td.blue-column {
+  color: blue;
+  border-color: blue;
+}
+
+#Xdayschedule td.green-column {
+  color: green;
+  border-color: green;
+}
+#WeeklyTable td.green-column {
+  color: white;
+  border-color: white;
+  background-color: green;
+}
+
+#Xdayschedule td.blue-column {
+  color: blue;
+  border-color: blue;
+}
+
+.green-table {
+  color: green;
+  border-color: green;
+}
+
+button {
+  /* width: 120px; /* Adjust the width as needed */
+  /* height: 90px; /* Adjust the height as needed */
+  text-align: center;
+  display: inline-block;
+  flex-direction: column;
+  justify-content: center;
+}

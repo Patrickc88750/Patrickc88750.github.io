@@ -17,3 +17,7 @@ document.head.appendChild(script4);
 var script5 = document.createElement('script');
 script5.src = 'Make_Analogclock.js';
 document.head.appendChild(script5);
+
+var script6 = document.createElement('script');
+script6.src = 'Make_Appointments.js';
+document.head.appendChild(script6);

@@ -6,6 +6,9 @@ function YeartoArrayFunction() {    // output is YearArray, a large matrix
     let Yearmonthday = []; 
     let Lastdayb4break = [];
     let Firstdayback = [];     // initialize comparison reference
+    let weeknumber = 1;     // first week is number 1; week is SUN to SAT
+    let longmonth = "";
+    let shortmonth = "";
 
     for (let i=0; i<yearcount; ++i){
         lines[i]=lines[i].trim();
@@ -17,6 +20,10 @@ function YeartoArrayFunction() {    // output is YearArray, a large matrix
         var whichweekday = "";
         var weekdaycount = 0;
         switch (tokens[3]){
+            case "SUN":
+                whichweekday = "Sunday";
+                weekdaycount = 0;
+                break;
             case "MON":
                 whichweekday = "Monday";
                 weekdaycount = 1;
@@ -40,54 +47,66 @@ function YeartoArrayFunction() {    // output is YearArray, a large matrix
             case "SAT":
                 whichweekday = "Saturday";
                 weekdaycount = 6;
-                break;
-            case "SUN":
-                whichweekday = "Sunday";
-                weekdaycount = 0;
-            }
+                }
         switch(tokens[1]){
             case "1":
                 longmonth = "January";
+                shortmonth = "Jan";
                 break;
             case "2":
                 longmonth = "February";
+                shortmonth = "Feb";
                 break;
             case "3":
                 longmonth = "March";
+                shortmonth = "Mar";
                 break;
             case "4":
                 longmonth = "April";
+                shortmonth = "Apr";
                 break;
             case "5":
                 longmonth = "May";
+                shortmonth = "May";
                 break;
             case "6":
                 longmonth = "June";
+                shortmonth = "Jun";
                 break;
             case "7":
                 longmonth = "July";
+                shortmonth = "Jul";
                 break;
             case "8":
                 longmonth = "August";
+                shortmonth = "Aug";
                 break;
             case "9":
                 longmonth = "September";
+                shortmonth = "Sep";
                 break;
             case "10":
                 longmonth = "October";
+                shortmonth = "Oct";
                 break;
             case "11":
                 longmonth = "November";
+                shortmonth = "Nov";
                 break;
             case "12":
                 longmonth = "December";
+                shortmonth = "Dec";
             }
-        YearArray.push([parseInt(tokens[8]), Yearmonthday[i], whichweekday, tokens[4], parseInt(tokens[5]), tokens[6], tokens[7], Daysbacktoschool[i], Lastdayb4break[i], Firstdayback[i], tokens[0], tokens[1], tokens[2], weekdaycount, longmonth]);
-   }   // an entire YearArray ~365 rows is now formed
+        YearArray.push([parseInt(tokens[8]), Yearmonthday[i], whichweekday, tokens[4], parseInt(tokens[5]), tokens[6], tokens[7], Daysbacktoschool[i], Lastdayb4break[i], Firstdayback[i], tokens[0], tokens[1], tokens[2], weekdaycount, longmonth, weeknumber, shortmonth]);
+        if (weekdaycount == 6){weeknumber = weeknumber + 1; }
+    
+    }   // an entire YearArray ~365 rows is now formed
+    weekcount = YearArray[yearcount - 1][15];
+
     // YearArray column definition
     // 0: index, 1 to approx. 365 tokens[8] (number)
     // 1: Yearmonthday composite date value (number)
-    // 2: day of week SUN MON ... SAT tokens[3] (string)
+    // 2: day of week Sunday Monday ... Saturday tokens[3] (string)
     // 3: Bell type for a specific day as an alphabet letter tokens[4] (alphabet)
     // 4: UNICODE of Bell type letter tokens[5] (number)
     // 5: Special dates Q academic R break longer than or equal to 3 days tokens[6]
@@ -98,8 +117,10 @@ function YeartoArrayFunction() {    // output is YearArray, a large matrix
     // 10: Year (string)
     // 11: Month (string)
     // 12: Day (string)
-    // 13: weekdaycount (number)
+    // 13: weekdaycount (number 0 to 6)
     // 14: longmonth (string)
+    // 15: weeknumber (number 1 to 5X)
+    // 16: short month (string)
     
     // this section initialize column indexed 7, 8, and 9
     YearArray[0][7] = 1;    // the next day is a school day
@@ -175,6 +196,10 @@ function doClockTick() {
         var  outputElement = document.getElementById("clocktickindicator");
         outputElement.textContent = tickstring;
         
+        // define other constants derived from todayindex
+        todaywhatdayisit = YearArray[todayindex][13];
+        todayweeknum = YearArray[todayindex][15];
+
         Secondsumnow = (hours * 60 + mins) * 60 + secs;
     
     // load the bell schedule for day pointed to by todayindex
@@ -378,6 +403,35 @@ function doClockTick() {
                 // }
             }
     } // else for dayfound != 0
+    
+    // If admin is not set then this if loop won't run
+    if (timeoffsetjustchanged == 1){
+        document.getElementById("weeknumoffset").value = 0;
+        Specifyweekoffsetrange();
+        weeknumselected = todayweeknum;
+        PrintWeeklyTable(todayweeknum);
+        var div = document.getElementById("Xdayschedule");
+        if (div) {
+        div.innerHTML = "";
+        }
+
+        timeoffsetjustchanged = 0;  // reset flag
+    }
+    
+    if (todayindex < yearcount){    // last day of calendar won't apply
+        if (YearArray[todayindex + 1][4] > repeatscheduleends && YearArray[todayindex + 1][4] != 90){
+            var alertString = "*Alert* tomorrow's schedule is special";
+            var outputElement = document.getElementById("alertmessage");
+            outputElement.textContent = alertString;
+        } else {
+            var div = document.getElementById("alertmessage");
+            if (div) {
+            div.innerHTML = "";
+            }
+        }
+    }   
+    
+    
 }
 
 function DaytoArray(){
@@ -499,7 +553,7 @@ function GenerateTable() {
 
     var formattedDate =YearArray[todayindex][2]  + " " + YearArray[todayindex][11] + "-" + YearArray[todayindex][12] + "-" + YearArray[todayindex][10];  
     
-    todayrows.push([formattedDate, "minutes", TodaybellArray[0][4] + " Schedule"]);
+    todayrows.push([formattedDate, "Minutes", TodaybellArray[0][4] + " Schedule"]);
     
     var arrowindex = 99;
     var parenth = 0;
@@ -550,6 +604,8 @@ function GenerateTable() {
     for (var i = 0; i < columnCount; i++) {
         var headerCell = document.createElement("TH");
         headerCell.innerHTML = todayrows[0][i];
+        headerCell.style.paddingLeft = '20px';
+        headerCell.style.paddingRight = '20px';
         row.appendChild(headerCell);
     }    
 
@@ -558,6 +614,10 @@ function GenerateTable() {
         for (var j = 0; j < columnCount; j++) {
             var cell = row.insertCell(-1);
             cell.innerHTML = todayrows[i][j];
+            if (j == 0) {
+                cell.style.textAlign = 'right';
+                cell.style.paddingRight = '40px';
+            };
         }
     }
 
@@ -581,6 +641,8 @@ function Generateblank() {  // generate a blank schedule if not a school day
     for (var i = 0; i < columnCount; i++) {
         var headerCell = document.createElement("TH");
         headerCell.innerHTML = todayrows[0][i];
+        headerCell.style.paddingLeft = '20px';
+        headerCell.style.paddingRight = '20px';
         row.appendChild(headerCell);
     }    
 
@@ -603,4 +665,44 @@ function createcurrentDate(){
     rawmillisecond = rawmillisecond +  offsetmillisec;
     currentDate = new Date(rawmillisecond);
     return currentDate;
+}
+
+function Do_modeXschedule(){
+    // inputs are YearArray, weekcount output is to change repeatscheduleends
+    var firstdaysecondweek = 0;
+    while (YearArray[firstdaysecondweek][15] < 2){firstdaysecondweek++};
+    var weekdayarray = [];
+    for (let i=0; i<5; i++){weekdayarray[i] = []};  // initialize 2D array
+    for (i=0; i<5; i++){
+        for (let jweek=2; jweek < weekcount; jweek++){
+            let whichday = firstdaysecondweek + i + 1 + (jweek - 2) * 7;
+            weekdayarray[i][jweek - 2] = YearArray[whichday][4];
+        }
+    }
+    // weekdayarray.forEach(e => console.log(e));
+    let mode = [];
+    let maxCount = [];
+    for (i=0; i<5; i++){maxCount[i] = 0}    // initialize maxCounts of all five weekdays to be zero
+    for (i=0; i<5; i++){
+        const counts = {};
+        
+        for (const num of weekdayarray[i]) {
+            if (num in counts) {
+                counts[num]++;
+            } else {
+                counts[num] = 1;
+            }
+
+            if (counts[num] > maxCount[i]) {
+                maxCount[i] = counts[num];
+                mode[i] = num;
+            }
+        }
+    }
+    // maxCount.forEach(e => console.log(e));
+    // mode.forEach(e => console.log(e));
+    for (i=0; i<5; i++){
+        if (mode[i] > repeatscheduleends){repeatscheduleends = mode[i]}
+    }
+    // console.log(repeatscheduleends);
 }

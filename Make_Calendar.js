@@ -1,5 +1,4 @@
-function Oneschedule(schar) {
-    // Needs TodayBellArray, Onedaystring, Todaycount
+function Oneschedule(schar, Xdaycount, XdaybellArray) {
     var todayrows = new Array();
     var starthr = 0;
     var startmin = 0;
@@ -8,15 +7,15 @@ function Oneschedule(schar) {
     var timespanstring = 0;
     var formattedDate = "Schedule " + schar;
     
-    todayrows.push([formattedDate, "minutes", TodaybellArray[0][4] + " Schedule"]);
+    todayrows.push([formattedDate, "minutes", XdaybellArray[0][4] + " Schedule"]);
     
-    for (i=0; i < Todaycount; ++i){
+    for (i=0; i < Xdaycount; ++i){
         
-        if (TodaybellArray[i][5] == 1){
-            starthr = TodaybellArray[i-1][0];
-            startmin = TodaybellArray[i-1][1];
-            endhr = TodaybellArray[i][0];
-            endmin = TodaybellArray[i][1];
+        if (XdaybellArray[i][5] == 1){
+            starthr = XdaybellArray[i-1][0];
+            startmin = XdaybellArray[i-1][1];
+            endhr = XdaybellArray[i][0];
+            endmin = XdaybellArray[i][1];
             var deltaminute = endhr * 60 + endmin - starthr * 60 - startmin;
             if (starthr > 12){starthr = starthr - 12;}
             if (startmin < 10){startmin = "0" + startmin;}
@@ -24,7 +23,7 @@ function Oneschedule(schar) {
             if (endmin < 10){endmin = "0" + endmin;}
 
             timespanstring = starthr + ":" + startmin + " - " + endhr + ":" + endmin;
-            eventstring = TodaybellArray[i][4];
+            eventstring = XdaybellArray[i][4];
             
             todayrows.push([timespanstring, deltaminute, eventstring]);
         }
@@ -45,6 +44,10 @@ function Oneschedule(schar) {
         for (var j = 0; j < columnCount; j++) {
             var cell = row.insertCell(-1);
             cell.innerHTML = todayrows[i][j];
+            if (j == 0) {cell.style.textAlign = 'right';
+            cell.style.paddingRight = '20px';
+            cell.style.paddingLeft = '20px';
+            };
         }
     }
     
@@ -84,8 +87,8 @@ function Checkscheduleunicodematch(){   // there must be at least one schedule A
     }
     schedulecount = maxicode - 65;
     // display status
-    if (unicodecount == schedulecount){
-        var StatusString = "Schedule count matches calendar";
+    if (unicodecount != schedulecount){
+        var StatusString = "!! Schedule count does not match calendar!";
         var OutputElement = document.getElementById("Matchstatus");
         OutputElement.textContent = StatusString;
     }
@@ -100,10 +103,8 @@ function printallschedules(){
     for (i=0; i<unicodecount; ++i){
         singlechar = String.fromCharCode(i+65);
         eval(targetvar + " = " + firstpart + singlechar + secondpart + ";" );
-        DaytoArray();
-        TodaybellArray = BellArray;
-        Todaycount = Onedaycount;
-        Oneschedule(singlechar);
+        DaytoArray();   // output is BellArray
+        Oneschedule(singlechar, Onedaycount, BellArray);
     }
     
     
@@ -114,7 +115,7 @@ function printyearcalendar(){
     var todayrows = new Array();
     
     todayrows.push([" ", " ", "Entire", "School", "Calendar"," "," "]);
-    todayrows.push(["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]);
+    todayrows.push(["SUN","MON","TUE","WED","THU","FRI","SAT"]);
     
   
     var icalendarlastday = yearcount - 1;
@@ -142,9 +143,17 @@ function printyearcalendar(){
             beginday = 0;   // reset beginday if not 1st of month or 1st of calendar
         }
         // construct todays content
-        let schedulechar = " _ _ "+YearArray[i][3]; // Bell type A B C to Z
-        if (schedulechar == " _ _ Z"){schedulechar = " ";}
-        oneweekentries[whichweekday] = YearArray[i][5]+" "+YearArray[i][12]+" "+schedulechar;
+        // let schedulechar = " _ _ "+YearArray[i][3]; // Bell type A B C to Z
+        // if (schedulechar == " _ _ Z"){schedulechar = " ";}
+        let schedulechar = "";
+        if (YearArray[i][3]  == "Z"){
+            schedulechar = " ";
+        } else if (YearArray[i][3] < "D"){
+            schedulechar = "<span style='color:blue'>" + YearArray[i][3] + "</span>" + "<span style='color:white;'>_</span>"; // Bell type A B C to Z
+        } else {
+            schedulechar = "<span style='color:red'>" + YearArray[i][3] + "</span>" + "<span style='color:white;'>_</span>"; // Bell type D and up
+        }
+        oneweekentries[whichweekday] =  "<span style='color:green'>"+YearArray[i][5]+"</span>"+" "+ schedulechar + YearArray[i][12];
         // Push a week line when day is Saturday
         if (whichweekday == 6){
             todayrows.push([oneweekentries[0],oneweekentries[1],oneweekentries[2],oneweekentries[3],oneweekentries[4],oneweekentries[5],oneweekentries[6]]);
@@ -181,7 +190,7 @@ function printyearcalendar(){
                 // However, if other than Saturday, need to fill rest of week, then
                 // push, and then push a blank line.
                 beginday = 1;
-                todayrows.push([" "," "," "," "," "," "," ."])
+                todayrows.push([" "," "," "," "," "," ","<span style='color:white;'>.</span>"])
             }
         }
     }
@@ -205,6 +214,9 @@ function printyearcalendar(){
         for (var j = 0; j < columnCount; j++) {
             var cell = row.insertCell(-1);
             cell.innerHTML = todayrows[i][j];
+            cell.style.textAlign = 'right';
+            cell.style.paddingRight = '20px';
+            cell.style.paddingLeft = '10px';
         }
     }
     

@@ -1,5 +1,5 @@
 function doStartClock() {
-    
+    // Define Global variables
     YearArray = [];
     TodaybellArray = [];
     NextdaybellArray = [];
@@ -7,9 +7,10 @@ function doStartClock() {
     Todaystring = [];
     Onedaystring = [];
     Nextdaystring = [];
+    AllShortArray = []; // hold all shortened schedules AM/lunch/PM
     yearcount = 0;      //number of rows in YearArray, approx 365
-    todayindex = 0;     // where in the YearArray is today
-    tindex_lastsecond = 0;  // will be updated in doClockTick
+    todayindex = 0;     // where in the YearArray is today. Starting at 0
+    tindex_lastsecond = 0;  // will be updated in doClockTick()
     nextbellindex = 0;
     nextbell_lastsec = 0;   // check for class transitions
     Onedaycount = 0; // number of bells in BellArray
@@ -28,7 +29,14 @@ function doStartClock() {
     schedulecount = 0;  // how many day schedules in this school
     unicodecount = 0;   // how many unicodes less than 90 in Year calendar
     currentDate = 0;    // make this global for analog clock to access
-    
+    repeatscheduleends = 65;   // the next in alphabet will be a special schedule
+    weekcount = 0;      // how many weeks are in the year schedule
+    todaywhatdayisit = 0;   // based on todayindex, number 0 to 6
+    todayweeknum = 0;       // week number based on todayindex, 1 to 53
+    timeoffsetjustchanged = 0;  // Print weekly schedule after time offset has changed
+    weekdayselected = 99;    // the weekday selected to be printed in Xdayschedule section
+    weeknumselected = 0;    // the weeknum 1 to 53 selected to be printed
+
                     
     // MakeBellSchedule(); // Yearstring, DayXstring created
   
@@ -51,20 +59,33 @@ function doStartClock() {
 
     Do_displaylogo('leftfield', Schoollogo_string);
 
-    if (adminmode ==1){Do_offsetform('offsetinputs');}
+    if (adminmode ==1){Do_offsetform('offsetinputs')}
 
     YeartoArrayFunction();  // return YearArrayTemp and yearcount
 
+    Checkscheduleunicodematch();    // The two counts must match
+    
+    Do_modeXschedule();     // determine which schedules are repeating
+    
+    Allshortschedules();    // populate AllShortArray
+
     if (adminmode == 1){
-        Checkscheduleunicodematch();    // The two counts must match
         
         printallschedules();
 
         printyearcalendar();
     }
     
+    Do_apptform('offsetweek');
+
     doClockTick();  // setInterval does Delay first then action
-    
+
+    Do_apptdetails();   // also set weekoffset range
+
+    Do_makescrollbutton("scrollbuttonsection");
+
+    Do_apptscroll();
+
     setInterval(doClockTick, 1000);       
     
 }

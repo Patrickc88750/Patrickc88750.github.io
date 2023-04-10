@@ -56,6 +56,23 @@ function Do_offsetform(ContainerElementID){
     ContainerElement.appendChild(itemPar);
 }
 
+function Do_makescrollbutton(ContainerElementID){
+    var ContainerElement = document.getElementById(ContainerElementID);
+    var itemPar = makeinlineElement("New! Making Plans and Appointments", "scroll-button", "Do_apptscroll()");
+    ContainerElement.appendChild(itemPar);
+}
+
+function Do_apptscroll(){
+    var scrollButton = document.getElementById("scroll-button");
+    // console.log("Do_apptscroll is run");
+    scrollButton.addEventListener("click", function() {
+        console.log("hear click");
+        window.scrollTo({
+            top: document.getElementById("making-appointments").offsetTop,
+            behavior: "smooth"
+        });
+    });
+}
 function makeheadingPar(valueText){
     let inputPar = document.createElement("p");
     inputPar.innerHTML = valueText;
@@ -100,6 +117,8 @@ function offset_onclick(){
     ohour = parseInt(document.form1.offsethour.value);
     omin = parseInt(document.form1.offsetmin.value);
     offsetmillisec = ((oday * 24 + ohour) * 60 + omin) * 60 * 1000;
+    // need to redo weeknum range after the next clocktick is processed
+    timeoffsetjustchanged = 1;  
 }
 
 function delete_onclick(){
@@ -107,6 +126,8 @@ function delete_onclick(){
     document.form1.offsethour.value = 0;
     document.form1.offsetmin.value =0;
     offsetmillisec = 0;
+    // need to redo weeknum range after the next clocktick is processed
+    timeoffsetjustchanged = 1;
 }
 
 function day_onblur(){}
