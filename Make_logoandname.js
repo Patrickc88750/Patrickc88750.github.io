@@ -113,18 +113,18 @@ function makeinlineElement(valueText, nameText, onclickText) {
     return inputElement;
 }
 function offset_onclick(){
-    oday = parseInt(document.form1.offsetday.value);
-    ohour = parseInt(document.form1.offsethour.value);
-    omin = parseInt(document.form1.offsetmin.value);
+    var oday = parseInt(document.getElementById('offsetday').value);
+    var ohour = parseInt(document.getElementById('offsethour').value);
+    var omin = parseInt(document.getElementById('offsetmin').value);
     offsetmillisec = ((oday * 24 + ohour) * 60 + omin) * 60 * 1000;
     // need to redo weeknum range after the next clocktick is processed
     timeoffsetjustchanged = 1;  
 }
 
 function delete_onclick(){
-    document.form1.offsetday.value = 0;
-    document.form1.offsethour.value = 0;
-    document.form1.offsetmin.value =0;
+    document.getElementById('offsetday').value = 0;
+    document.getElementById('offsethour').value = 0;
+    document.getElementById('offsetmin').value =0;
     offsetmillisec = 0;
     // need to redo weeknum range after the next clocktick is processed
     timeoffsetjustchanged = 1;

@@ -388,14 +388,15 @@ function Specifyweekoffsetrange(){
    }
 
 function deleteweek_onclick(){
-    document.form2.weeknumoffset.value = 0;
     var div = document.getElementById("Xdayschedule");
     if (div) {
     div.innerHTML = "";
     }
     weekdayselected = 99;    // reset weekdayselected to be out of range
-    PrintWeeklyTable(todayweeknum);
-    // console.log("delete week clicked");
+    
+    document.getElementById("weeknumoffset").value = 0;
+    weeknumselected = todayweeknum;
+    PrintWeeklyTable(weeknumselected);
 }
 
 function Do_apptdetails(){
@@ -438,21 +439,9 @@ function Do_apptdetails(){
 
     
     var tempvalue = document.getElementById("weeknumoffset").value;
+    // at the beginning of this program, .value is initialized to 0
     weeknumselected = todayweeknum + parseInt(tempvalue);
-    PrintWeeklyTable(todayweeknum + parseInt(tempvalue));
-    /* document.getElementById("weeknumoffset").addEventListener("input", function() {
-        // Your code here to perform the desired action
-        var tempvalue = document.getElementById("weeknumoffset").value;
-        PrintWeeklyTable(todayweeknum + parseInt(tempvalue));
-        if (YearArray[todayindex + 7 * parseInt(tempvalue)][4] != 90){
-            PrintXschedule(todayindex + 7 * parseInt(tempvalue))
-        } else {
-            const tableElement = document.getElementById('Xdayschedule');
-            // Clear the content of the element
-            tableElement.innerHTML = '';
-        } 
-    
-    }); */
+    PrintWeeklyTable(weeknumselected);
 }
 
 // may not be used

@@ -35,10 +35,6 @@ function InitializeAllInputs(){
     12,50,Lunch
     2,50,Instruction
     `
-    DayDstring = `
-    `
-   
-
     Yearstring = `
     2022,8,9,TUE,C,67,,,1
     2022,8,10,WED,B,66,,,2

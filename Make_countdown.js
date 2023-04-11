@@ -408,6 +408,8 @@ function doClockTick() {
     if (timeoffsetjustchanged == 1){
         document.getElementById("weeknumoffset").value = 0;
         Specifyweekoffsetrange();
+
+        weekdayselected = 99;   // so that when PrintWeeklyTable, no column is green
         weeknumselected = todayweeknum;
         PrintWeeklyTable(todayweeknum);
         var div = document.getElementById("Xdayschedule");
