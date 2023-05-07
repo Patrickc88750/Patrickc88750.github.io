@@ -3,7 +3,7 @@ function InitializeAllInputs(){
 Schoolname_string = `Castro Valley High School
 9/10/11/12th-grade bell timer`
 
-Schoollogo_string = `./images/Trojans100.jpg`
+Schoollogo_string = `./images/Trojans100.png`
 
 Resources_string = `https://cvhs.cv.k12.ca.us/apps/bell_schedules/, CVHS all bell schedules
 https://cvhs.cv.k12.ca.us/apps/pages/index.jsp?uREC_ID=1381367&type=d&pREC_ID=1563519, CVHS monthly calendar
@@ -20,7 +20,7 @@ DayAstring = `
 10,51,settling to 3rd
 11,48,3rd period
 11,54,passing to 4th
-12,54,P4 Announcements
+12,54,4th period
 1,29,Lunch
 1,35,settling to 5th
 2,32,5th period

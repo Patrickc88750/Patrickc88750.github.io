@@ -3,7 +3,7 @@ function InitializeAllInputs(){
 Schoolname_string = `Castro Valley Elementary School
 4/5th-grade bell timer`
 
-Schoollogo_string = `./images/CVEbear100.jpg`
+Schoollogo_string = `./images/CVEBear100.png`
 
 Resources_string = `https://4.files.edl.io/ec80/08/15/22/172154-f7ada390-a9f7-4e4d-9a62-858deb16b66f.pdf, CVE daily bell schedule 2022-23
 https://cve.cv.k12.ca.us/apps/pages/index.jsp?uREC_ID=1374761&type=d&pREC_ID=1574004, CVE monthly calendar
@@ -12,33 +12,33 @@ https://cve.cv.k12.ca.us/, Castro Valley Elementary School official website
 `
 DayAstring = `
 8,10,Regular M-Tu-W-Th 
-10,5,Instruction
+10,5,Instruction1
 10,25,Recess
-12,20,Instruction
+12,20,Instruction2
 1,0,Lunch
-2,50,Instruction
+2,50,Instruction3
 `
 DayBstring = `
 8,10,Friday
-10,5,Instruction
+10,5,Instruction1
 10,25,Recess
-12,0,Instruction
+12,0,Instruction2
 `
 DayCstring = `
 8,10,150 Early Release
-10,5,Instruction
+10,5,Instruction1
 10,25,Recess
-12,20,Instruction
+12,20,Instruction2
 1,0,Lunch
-1,50,Instruction
+1,50,Instruction3
 `
 DayDstring = `
 8,10,110 Early Release
-10,5,Instruction
+10,5,Instruction1
 10,25,Recess
-12,20,Instruction
+12,20,Instruction2
 1,0,Lunch
-1,10,Instruction
+1,10,Instruction3
 `
 
 

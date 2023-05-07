@@ -3,7 +3,7 @@ function InitializeAllInputs(){
 Schoolname_string = `Canyon Middle School
 6th-grade bell timer`
 
-Schoollogo_string = `./images/Condor100.gif`
+Schoollogo_string = `./images/Condor100.png`
 
 Resources_string = `https://canyon.cv.k12.ca.us/apps/pages/index.jsp?uREC_ID=1381543&type=d&pREC_ID=2386364, Canyon daily bell schedule 2022-23
 https://canyon.cv.k12.ca.us/apps/pages/index.jsp?uREC_ID=1381543&type=d&pREC_ID=1575508, Canyon monthly calendar

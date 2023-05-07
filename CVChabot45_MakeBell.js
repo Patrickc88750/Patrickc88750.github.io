@@ -3,7 +3,7 @@ function InitializeAllInputs(){
     Schoolname_string = `Chabot Elementary School
     4/5th-grade bell timer`
     
-    Schoollogo_string = `./images/ChabotTigers100.jpg`
+    Schoollogo_string = `./images/ChabotTigers100.png`
     
     Resources_string = `https://chabot.cv.k12.ca.us/apps/pages/index.jsp?uREC_ID=1376620&type=d&pREC_ID=1559547, Chabot daily bell schedule 2022-23
     https://chabot.cv.k12.ca.us/apps/pages/index.jsp?uREC_ID=1376620&type=d&pREC_ID=1577211, Chabot monthly calendar
@@ -13,27 +13,27 @@ function InitializeAllInputs(){
         
     DayAstring = `
     8,10,Regular M-Tu-W-Th 
-    10,20,Instruction
+    10,20,Instruction1
     10,36,Recess
-    12,10,Instruction
+    12,10,Instruction2
     12,50,Lunch
-    2,50,Instruction
+    2,50,Instruction3
     `
     DayBstring = `
     8,10,Friday Early Dismissal
-    10,20,Instruction
+    10,20,Instruction1
     10,36,Recess
-    12,10,Instruction
+    12,10,Instruction2
     12,50,Lunch
-    1,45,Instruction
+    1,45,Instruction3
     `
     DayCstring = `
     9,10,Late Start Tuesday
-    10,20,Instruction
+    10,20,Instruction1
     10,36,Recess
-    12,10,Instruction
+    12,10,Instruction2
     12,50,Lunch
-    2,50,Instruction
+    2,50,Instruction3
     `
     Yearstring = `
     2022,8,9,TUE,C,67,,,1

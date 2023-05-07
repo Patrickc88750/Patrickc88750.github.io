@@ -3,7 +3,7 @@ function InitializeAllInputs(){
 Schoolname_string = `Creekside Middle School
 6/7/8th-grade bell timer`
 
-Schoollogo_string = `./images/Wildcats100.gif`
+Schoollogo_string = `./images/Wildcats100.png`
 
 Resources_string = `https://creekside.cv.k12.ca.us/apps/pages/index.jsp?uREC_ID=1377072&type=d&pREC_ID=1559779, Creekside daily bell schedule 2022-23
 https://creekside.cv.k12.ca.us/apps/pages/index.jsp?uREC_ID=1377072&type=d&pREC_ID=1577358, Creekside monthly calendar

@@ -9,20 +9,19 @@ function doStartClock() {
     Nextdaystring = [];
     AllShortArray = []; // hold all shortened schedules AM/lunch/PM
     yearcount = 0;      //number of rows in YearArray, approx 365
-    todayindex = 0;     // where in the YearArray is today. Starting at 0
-    tindex_lastsecond = 0;  // will be updated in doClockTick()
+    todayindex = 0;     // where in the YearArray is today. 0 to (num of days -1)
+    tindex_lastsecond = -1;  // will be updated in doClockTick()
     nextbellindex = 0;
     nextbell_lastsec = 0;   // check for class transitions
     Onedaycount = 0; // number of bells in BellArray
     Todaycount = 0;
     Nextdaycount = 0;
-    Secondsumnow = 0;
+    Secondsumnow = 0;   // seconds from midnight
     bellday = 0;
     bellhour = 0;
     bellmin = 0;
     bellsec = 0;
-    timedelta = 0;
-    deltacomposite = 0;
+    deltacomposite = 0; // unit is seconds, to the next bell
     offsetmillisec = 0;
     singlechar = "NO"; // define single character string
     DayZstring = 0;     // ascii code 90 = Z means no school
@@ -36,6 +35,16 @@ function doStartClock() {
     timeoffsetjustchanged = 0;  // Print weekly schedule after time offset has changed
     weekdayselected = 99;    // the weekday selected to be printed in Xdayschedule section
     weeknumselected = 0;    // the weeknum 1 to 53 selected to be printed
+    /* additional global variables
+    in function doOneDelta():
+    timeString  displays in format hh:mm:ss
+    titlestring displays timestring in browser tab
+    arrowstring displays timestring in today's schedule table
+    minutecomposite
+    delsec
+    delhr
+    delmin
+    */
 
                     
     // MakeBellSchedule(); // Yearstring, DayXstring created
@@ -83,9 +92,8 @@ function doStartClock() {
     Do_apptdetails();   // also set weekoffset range
 
     Do_makescrollbutton("scrollbuttonsection");
-
-    Do_apptscroll();
-
+    // Do_apptscroll and Do_alarmscroll absorbed into Do_makescrollbutton
+    
     setInterval(doClockTick, 1000);       
     
 }

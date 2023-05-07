@@ -58,26 +58,46 @@ function Do_offsetform(ContainerElementID){
 
 function Do_makescrollbutton(ContainerElementID){
     var ContainerElement = document.getElementById(ContainerElementID);
-    var itemPar = makeinlineElement("New! Making Plans and Appointments", "scroll-button", "Do_apptscroll()");
+    ContainerElement.innerHTML = ""; // Clear the contents of the container element
+    var itemPar = makeinlineElement("Making Plans and Appointments", "scroll-button", "Do_apptscroll()");
     ContainerElement.appendChild(itemPar);
+    Do_apptscroll();    // only set up an event listener for clicks
+    if (YearArray[todayindex][4] == 90) {
+        if (todayindex != tindex_lastsecond){   // if no school then only draw once whole day
+            // do not include alarm button
+        }
+    } else {    // else today is a school day
+        if (todayindex != tindex_lastsecond){  
+            var itemPar = makeinlineElement("Setting alarms", "alarm-button", "Do_alarmscroll()");
+            ContainerElement.appendChild(itemPar);  
+            // school day create table once everyday       
+            // include alarm button
+            Do_alarmscroll();
+        }
+    }
 }
 
 function Do_apptscroll(){
     var scrollButton = document.getElementById("scroll-button");
     // console.log("Do_apptscroll is run");
     scrollButton.addEventListener("click", function() {
-        console.log("hear click");
+        // console.log("hear click");
         window.scrollTo({
             top: document.getElementById("making-appointments").offsetTop,
             behavior: "smooth"
         });
     });
 }
-function makeheadingPar(valueText){
-    let inputPar = document.createElement("p");
-    inputPar.innerHTML = valueText;
-    inputPar.className = "text5";
-    return inputPar;
+
+function Do_alarmscroll(){
+    var scrollButton = document.getElementById("alarm-button");
+    scrollButton.addEventListener("click", function() {
+        // console.log("alarmscroll hear click");
+        window.scrollTo({
+            top: document.getElementById("dvTableContainer").offsetTop,
+            behavior: "smooth"
+        });
+    });
 }
 
 function makeInputPar(labelText, nameText) {
@@ -110,6 +130,7 @@ function makeinlineElement(valueText, nameText, onclickText) {
     inputElement.className = "text5";
     inputElement.setAttribute("id", nameText);
     inputElement.setAttribute("name", nameText);
+    inputElement.style.marginRight = "10px"; // Add margin to the right of the button
     return inputElement;
 }
 function offset_onclick(){

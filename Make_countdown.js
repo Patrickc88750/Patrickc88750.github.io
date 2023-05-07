@@ -393,16 +393,23 @@ function doClockTick() {
     }
     // Below decides if a table of schedule will be created or modified
     if (YearArray[todayindex][4] == 90) {
-            if (todayindex != tindex_lastsecond){   // if no school then only draw once whole day
-                Generateblank();
-                }
-            } else {
-                // else today is a school day
-                // if(todayindex != tindex_lastsecond || nextbell_lastsec != nextbellindex){
-                    GenerateTable();
-                // }
-            }
-    } // else for dayfound != 0
+        if (todayindex != tindex_lastsecond){   // if no school then only draw once whole day
+            // either during startup (tindex_lastsecond = -1) or tindex is one less than todayindex      
+            Generateblank();
+            Do_makescrollbutton("scrollbuttonsection"); // check again there and remove alarm button
+        }
+    } else {    // else today is a school day
+        if (todayindex != tindex_lastsecond){    
+            // school day create table once everyday 
+            // either during startup (tindex_lastsecond = -1) or tindex is one less than todayindex      
+            GenerateTableAlarm();
+            Do_makescrollbutton("scrollbuttonsection"); // check again there and remove alarm button
+        } else {
+            UpdateTableAlarm();
+            // Update the third column every second to reposition the arrow
+        }
+    }
+    } // else dayfound != 0, means that today is found inside YearArray
     
     // If admin is not set then this if loop won't run
     if (timeoffsetjustchanged == 1){
@@ -481,8 +488,8 @@ function DaytoArray(){
 }
 
 function Findnextbell(Secsumnow) {
-    nextfound = 0;
-    bellindex = 0;
+    var nextfound = 0;
+    var bellindex = 0;
     for (let i = 0; i < Onedaycount; ++i){
         delta = Secsumnow - BellArray[i][3] * 60;   // convert minutes to seconds
         // delta greater than 0 means the scheduled time has passed
@@ -491,7 +498,7 @@ function Findnextbell(Secsumnow) {
         if (delta <= 0 && nextfound == 0) {     // registers the first that happens
             nextfound = 1;
             bellindex = i;
-            deltacomposite = -1 * delta;    // Timer will display a positive delta
+            deltacomposite = -1 * delta;    // Timer will display a positive delta seconds
         }
     }
     if (nextfound == 0){
@@ -504,7 +511,7 @@ function doOneDelta(){
     timeString = "  ";
     titlestring = "  ";
     arrowstring = "  ";
-    minutecomposite = Math.floor(deltacomposite/60);
+    var minutecomposite = Math.floor(deltacomposite/60);
     delsec = deltacomposite % 60;
     delhr = Math.floor(minutecomposite/60);
     delmin = minutecomposite % 60;
@@ -521,15 +528,14 @@ function doOneDelta(){
     if (delhr == 0){
 
         timeString = delmin + ":" + delsec;
-        titlestring = timeString;
     } else {
         delhr = '' + delhr;
         if (delmin < 10){
             delmin = '0' + delmin;  // delmin converted to a string and padded
         }
         timeString = delhr + ":" + delmin + ":" + delsec;
-        titlestring = timeString;
     }
+    titlestring = timeString;
     arrowstring = timeString;   // print inside the table
     var outputElement = document.getElementById("timePar");
     outputElement.textContent = timeString;
@@ -545,98 +551,16 @@ function doOneDelta(){
     // document.getElementById("ctitle").style.color = 'black';
 }
 
-function GenerateTable() {
-    var todayrows = new Array();
-    var starthr = 0;
-    var startmin = 0;
-    var endhr = 0;
-    var endmin = 0;
-    var timespanstring = 0;
-
-    var formattedDate =YearArray[todayindex][2]  + " " + YearArray[todayindex][11] + "-" + YearArray[todayindex][12] + "-" + YearArray[todayindex][10];  
-    
-    todayrows.push([formattedDate, "Minutes", TodaybellArray[0][4] + " Schedule"]);
-    
-    var arrowindex = 99;
-    var parenth = 0;
-    if (nextbellindex != 0 && nextbellindex != 99){
-    //  the for loop below skips i=0 because no need for an arrows anyway
-    var i = nextbellindex;  // i is at least = 1 
-    while(TodaybellArray[i][5] != 1){
-        parenth = 1;    // the arrow timer will be in parenthesis
-        i++;        // i can at most be = Todaycount-1
-    }
-    arrowindex = i; // Todaybellarray[arrowindex][5] is definitely = 1
-    }
-    
-    
-    for (i=0; i < Todaycount; ++i){
-        
-        if (TodaybellArray[i][5] == 1){
-            starthr = TodaybellArray[i-1][0];
-            startmin = TodaybellArray[i-1][1];
-            endhr = TodaybellArray[i][0];
-            endmin = TodaybellArray[i][1];
-            var deltaminute = endhr * 60 + endmin - starthr * 60 - startmin;
-            if (starthr > 12){starthr = starthr - 12;}
-            if (startmin < 10){startmin = "0" + startmin;}
-            if (endhr > 12){endhr = endhr - 12;}
-            if (endmin < 10){endmin = "0" + endmin;}
-
-            timespanstring = starthr + ":" + startmin + " - " + endhr + ":" + endmin;
-            eventstring = TodaybellArray[i][4];
-            if (i == arrowindex) {
-                if (parenth == 0){
-                    eventstring = eventstring + " " + " " + " <== " + arrowstring;  // only occurs once
-                } else {
-                    // timer will be within parenthesis to indicate this is a transition
-                    eventstring = eventstring + " " + " " + " <== " + "(" + arrowstring + ")";  // only occurs once
-                }
-                
-            }
-            todayrows.push([timespanstring, deltaminute, eventstring]);
-        }
-    }
-    var table = document.createElement("TABLE");
-    table.border = "1";
-
-    var columnCount = todayrows[0].length;
-
-    var row = table.insertRow(-1);
-    for (var i = 0; i < columnCount; i++) {
-        var headerCell = document.createElement("TH");
-        headerCell.innerHTML = todayrows[0][i];
-        headerCell.style.paddingLeft = '20px';
-        headerCell.style.paddingRight = '20px';
-        row.appendChild(headerCell);
-    }    
-
-    for (var i = 1; i < todayrows.length; i++) {
-        row = table.insertRow(-1);
-        for (var j = 0; j < columnCount; j++) {
-            var cell = row.insertCell(-1);
-            cell.innerHTML = todayrows[i][j];
-            if (j == 0) {
-                cell.style.textAlign = 'right';
-                cell.style.paddingRight = '40px';
-            };
-        }
-    }
-
-    var dvTable = document.getElementById("dvTable");
-    dvTable.innerHTML = "";
-    dvTable.appendChild(table);
-}
-
 function Generateblank() {  // generate a blank schedule if not a school day
     var todayrows = new Array();
-    
-    var formattedDate =YearArray[todayindex][2]  + " " + YearArray[todayindex][11] + "-" + YearArray[todayindex][12] + "-" + YearArray[todayindex][10];  
+    var formattedDate = YearArray[todayindex][2] + " <span style='white-space: nowrap;'>" + YearArray[todayindex][11] + "-" + YearArray[todayindex][12] + "-" + YearArray[todayindex][10] + "</span>";
+
     todayrows.push([formattedDate, "No School"]);
     
     var table = document.createElement("TABLE");
-    table.border = "1";
-
+    table.id = "dvTable";
+    table.style.width = "550px";
+    
     var columnCount = todayrows[0].length;
 
     var row = table.insertRow(-1);
@@ -645,6 +569,7 @@ function Generateblank() {  // generate a blank schedule if not a school day
         headerCell.innerHTML = todayrows[0][i];
         headerCell.style.paddingLeft = '20px';
         headerCell.style.paddingRight = '20px';
+        headerCell.style.textAlign = 'center';
         row.appendChild(headerCell);
     }    
 
@@ -656,9 +581,10 @@ function Generateblank() {  // generate a blank schedule if not a school day
         }
     }
 
-    var dvTable = document.getElementById("dvTable");
-    dvTable.innerHTML = "";
-    dvTable.appendChild(table);
+    var dvTableContainer = document.getElementById("dvTableContainer");
+    dvTableContainer.innerHTML = "";
+    dvTableContainer.appendChild(table);
+
 }
 
 function createcurrentDate(){
@@ -707,4 +633,363 @@ function Do_modeXschedule(){
         if (mode[i] > repeatscheduleends){repeatscheduleends = mode[i]}
     }
     // console.log(repeatscheduleends);
+}
+
+function GenerateTableAlarm() {
+    /* Inputs are 
+    YearArray
+    todayindex
+    TodaybellArray
+    nextbellindex
+    Todaycount
+    arrowstring
+
+    */
+    var todayrows = new Array();    // builds table with header row
+    var starthr = 0;
+    var startmin = 0;
+    var endhr = 0;
+    var endmin = 0;
+    var timespanstring = "";
+    var eventstring = "";
+    var eventstringrows = new Array();
+    
+    var formattedDate = YearArray[todayindex][2] + " <span style='white-space: nowrap;'>" + YearArray[todayindex][11] + "-" + YearArray[todayindex][12] + "-" + YearArray[todayindex][10] + "</span>";
+
+    // var formattedDate =YearArray[todayindex][2]  + " " + YearArray[todayindex][11] + "-" + YearArray[todayindex][12] + "-" + YearArray[todayindex][10];  
+    
+    todayrows.push([formattedDate, "Minutes", TodaybellArray[0][4] + " Schedule"]);
+    
+    for (i=0; i < Todaycount; ++i){
+        
+        if (TodaybellArray[i][5] == 1){
+            starthr = TodaybellArray[i-1][0];
+            startmin = TodaybellArray[i-1][1];
+            endhr = TodaybellArray[i][0];
+            endmin = TodaybellArray[i][1];
+            var deltaminute = endhr * 60 + endmin - starthr * 60 - startmin;
+            // deltaminute duration of a period or a break/lunch
+            if (starthr > 12){starthr = starthr - 12;}
+            if (startmin < 10){startmin = "0" + startmin;}
+            if (endhr > 12){endhr = endhr - 12;}
+            if (endmin < 10){endmin = "0" + endmin;}
+
+            timespanstring = starthr + ":" + startmin + " - " + endhr + ":" + endmin;
+            eventstring = TodaybellArray[i][4];
+            eventstringrows.push([eventstring]);    // stores event string without arrow
+            // eventstringrows index is shifted by 1 from todayrows because of omission of header
+            todayrows.push([timespanstring, deltaminute, eventstring]);
+        }
+    }
+    var table = document.createElement("TABLE");
+    table.id = "dvTable";
+
+    var columnCount = todayrows[0].length;
+
+    var row = table.insertRow(-1);
+    for (var j = 0; j < columnCount; j++) { // three columns at this stage
+        var headerCell = document.createElement("TH");
+        headerCell.innerHTML = todayrows[0][j];
+        headerCell.style.textAlign ='center';
+        headerCell.style.paddingLeft = '10px';
+        headerCell.style.paddingRight = '10px';
+        if (j == 0) {
+            headerCell.style.textAlign = 'right';
+            headerCell.style.paddingRight = '25px';
+        };
+        row.appendChild(headerCell);
+    }  
+    // now add one more header cell on the right  
+    var headerCell = document.createElement("TH");
+        headerCell.innerHTML = "Alarm <span style='font-size: 50%'>repeat armed</span>";
+        headerCell.style.paddingLeft = '5px';
+        headerCell.style.paddingRight = '5px';
+        row.appendChild(headerCell);
+
+    for (var i = 1; i < todayrows.length; i++) {    // starting i = 1 not i = 0 because header is done
+        row = table.insertRow(-1);
+        for (var j = 0; j < columnCount; j++) {
+            var cell = row.insertCell(-1);
+            cell.innerHTML = todayrows[i][j];
+            if (j == 0) {
+                cell.style.textAlign = 'right';
+                cell.style.paddingRight = '20px';
+            };
+        }
+        // For each row in the for loop,
+        // Create the input and checkboxes group in the last cell of the row
+        var inputCell = document.createElement("td");
+        var inputContainer = document.createElement("div");
+        inputContainer.className = "input-checkbox-container";
+
+        var inputElement = document.createElement("input");
+        inputElement.type = "number";
+        inputElement.value = 0;
+        inputElement.min = 0;
+        inputElement.max = Math.min(todayrows[i][1] - 4, 10); 
+        inputElement.style.textAlign = "center"; // add this line to align the number to the right
+        inputElement.id = schoolid + "Minutestobell-" + eventstringrows[i-1]; // assign a unique ID to the input box
+        inputContainer.appendChild(inputElement);
+        // console.log(schoolid + "Minutestobell-" + eventstringrows[i-1]);
+
+        var checkbox1 = document.createElement("input");
+        checkbox1.type = "checkbox";
+        checkbox1.id = schoolid + "Checkbox1-" + eventstringrows[i-1]; // assign a unique ID to the first checkbox
+        inputContainer.appendChild(checkbox1);
+
+        var checkbox2 = document.createElement("input");
+        checkbox2.type = "checkbox";
+        checkbox2.id = schoolid + "Checkbox2-" + eventstringrows[i-1]; // assign a unique ID to the second checkbox
+        inputContainer.appendChild(checkbox2);
+
+        inputCell.appendChild(inputContainer);
+        // inputCell.style.paddingRight = '5px';
+        row.appendChild(inputCell);
+    }
+
+    var dvTableContainer = document.getElementById("dvTableContainer");
+    dvTableContainer.innerHTML = "";
+    dvTableContainer.appendChild(table);
+
+    // initialize all alarm inputs and checkboxes
+    // Loop through each input and checkbox
+    // eventstringrows.forEach(e => console.log(e));
+
+    for (var i = 0; i < eventstringrows.length; i++) {
+        var inputElement = document.getElementById(schoolid + "Minutestobell-" + eventstringrows[i]); // Get the input element by ID
+        var checkbox1 = document.getElementById(schoolid + "Checkbox1-" + eventstringrows[i]); // Get the first checkbox by ID
+        var checkbox2 = document.getElementById(schoolid + "Checkbox2-" + eventstringrows[i]); // Get the second checkbox by ID
+    
+        // Check if localStorage contains saved data for this input and checkbox
+        if (localStorage.getItem(schoolid + "Minutestobell-" + eventstringrows[i]) !== null) {
+        // If there is something other than null in localStorage
+        // then Set the input value to the previously saved value using getItem
+        inputElement.value = localStorage.getItem(schoolid + "Minutestobell-" + eventstringrows[i]);
+            
+        /* If the value retrieved from localStorage is "true", 
+        then the checked property of checkbox1 is set to true, 
+        effectively checking the checkbox in the UI. If the value 
+        retrieved from localStorage is anything else, the 
+        checkbox will remain unchecked in the UI. */
+
+        // Set the first checkbox state to the saved state from localStorage
+        checkbox1.checked = (localStorage.getItem(schoolid + "Checkbox1-" + eventstringrows[i]) === "true");
+    
+        // Set the second checkbox state to the saved state from localStorage
+        checkbox2.checked = (localStorage.getItem(schoolid + "Checkbox2-" + eventstringrows[i]) === "true");
+        }
+
+        // Now the state of the same variables will be saved into localStorage by setItem
+        // this way, all the variables and checkboxes will be saved even if null to start with
+        localStorage.setItem(schoolid + "Minutestobell-" + eventstringrows[i], inputElement.value);
+        localStorage.setItem(schoolid + "Checkbox1-" + eventstringrows[i], checkbox1.checked);
+        localStorage.setItem(schoolid + "Checkbox2-" + eventstringrows[i], checkbox2.checked);
+    }
+  
+   
+    dvTableContainer.addEventListener("click", function(event) {
+        // any new changes are immediately saved into localStorage
+    if (event.target && event.target.type === "checkbox") {
+        // Handle checkbox click
+        // Get the checkbox ID
+        var checkboxId = event.target.id;
+        // Save the checkbox state to localStorage
+        localStorage.setItem(checkboxId, event.target.checked);
+    } else if (event.target && event.target.type === "number") {
+        // Handle number input change
+        // Get the input ID and value
+        var inputId = event.target.id;
+        var inputValue = event.target.value;
+        // Save the input value to localStorage
+        localStorage.setItem(inputId, inputValue);
+    }
+    });
+
+    dvTableContainer.addEventListener("input", function(event) {
+        // any new changes are immediately saved into localStorage
+        if (event.target && event.target.type === "number") {
+            // Handle number input change
+            // Get the input ID and value
+            var inputId = event.target.id;
+            var inputValue = event.target.value;
+            var inputElement = event.target;
+            var minValue = parseFloat(inputElement.min);
+            var maxValue = parseFloat(inputElement.max);
+            
+            // Ensure that the input value is within the desired range
+            if (isNaN(inputValue) || inputValue < minValue) {
+                inputValue = minValue;
+            } else if (inputValue > maxValue) {
+                inputValue = maxValue;
+            }
+            
+            // Update the input value and save to localStorage
+            inputElement.value = inputValue;
+            localStorage.setItem(inputId, inputValue);
+        }
+    });      
+}
+
+function UpdateTableAlarm() {
+    /* Inputs are 
+    YearArray
+    todayindex
+    TodaybellArray
+    nextbellindex
+    Todaycount
+    arrowstring
+    Outputs are:
+    eventstringrows to use as part of alarm checkbox id
+    */
+    var eventwitharrow = new Array();
+    var eventstring = "";
+    var eventstringrows = new Array();
+    
+    var arrowindex = 99;
+    var parenth = 0;
+    if (nextbellindex != 0 && nextbellindex != 99){
+    // nextbellindex = 0 means early morning; nextbellindex = 99 after school
+    //  the for loop below skips i=0 because no need for an arrows anyway
+    var i = nextbellindex;  // i is at least = 1 
+    while(TodaybellArray[i][5] != 1){
+        parenth = 1;    // the arrow timer will be in parenthesis
+        i++;        // i can at most be = Todaycount-1
+    }
+    arrowindex = i; // Todaybellarray[arrowindex][5] is definitely = 1
+    }
+    // arrowindex can be 99 here in early morning or late afternoon or evening
+    
+    for (i=0; i < Todaycount; ++i){
+    // this for loop creates the eventstring with or without arrow, if arrowindex 99 nothing happens    
+        if (TodaybellArray[i][5] == 1){
+            eventstring = TodaybellArray[i][4];
+            eventstringrows.push([eventstring]);    // stores original event string for alarm checkboxes
+            if (i == arrowindex) {
+                if (parenth == 0){
+                    eventstring = eventstring + " " + " " + " <== " + arrowstring;  // only occurs once
+                } else {
+                    // timer will be within parenthesis to indicate this is a transition
+                    eventstring = eventstring + " " + " " + " <== " + "(" + arrowstring + ")";  // only occurs once
+                }
+                
+            }
+            eventwitharrow.push([eventstring]);
+        }
+    }
+    // Get all the cells in the third column of the table
+    // this table already omitted the passing durations
+    var cells = document.querySelectorAll("#dvTable td:nth-child(3)");
+
+    // Loop through each cell and update its content from the eventwitharrow array
+    for (var i = 0; i < cells.length; i++) {
+        var cell = cells[i];
+        var content = eventwitharrow[i][0]; // Get the content from the eventwitharrow array
+        cell.textContent = content; // Update the cell content
+    }
+    
+    // This section will check if the armed alarm will go off. 
+    const alarmSound = new Audio('audiovideo/beep-beep-6151.mp3');
+    const alarmSound2 = new Audio('audiovideo/beep-beep-Mod18.mp3');
+    // Thus arrowindex has to be within school hours, namely 1 to less than 10
+    if (arrowindex != 99){
+        // Sound Effect from Pixabay
+        // console.log("arrowindex = " + arrowindex);
+        var alarmstringid = schoolid + "Minutestobell-" + TodaybellArray[arrowindex][4];
+        var alarmminutes = localStorage.getItem(alarmstringid);
+        var alarmcomposite = 60 * alarmminutes;   // converted into seconds 
+        // reusing the checkbox 1 and 2 variables
+        // console.log("alarmcomposite = " + alarmcomposite + " and " + "deltacomposite = " + deltacomposite);
+        checkbox1 = document.getElementById(schoolid + "Checkbox1-" + TodaybellArray[arrowindex][4]); // temp name for that repeat box
+        checkbox2 = document.getElementById(schoolid + "Checkbox2-" + TodaybellArray[arrowindex][4]); // temp name for that armed box
+        var debugString = "debug: alarm = " + alarmcomposite + " and " + "delta = " + deltacomposite + " armed = " + checkbox2.checked + " CrOS agent = " + navigator.userAgent.indexOf("CrOS");
+        var debugElement = document.getElementById("debugonly");
+        debugElement.textContent = debugString;
+        //
+        if (deltacomposite == alarmcomposite && checkbox2.checked) {
+            // Attach event listener to a visible element on the page (such as a button or a link)
+            // document.addEventListener('click', function() {
+                // Check if the device is a Chromebook
+            if (navigator.userAgent.indexOf("CrOS") !== -1) {
+                // Reduce the volume of the alarm sound in sound file
+                // alarmSound2.volume = 0.9; // Set volume to 50%
+                alarmSound2.play();
+            } else {
+                // Except for CHromeOS all other Play the alarm sound at full volume
+                alarmSound.play();
+            }
+            // trigger the buzz vibration (if supported by the device)
+            if (navigator.vibrate) {
+                navigator.vibrate([200, 100, 200]); // vibration pattern (ms on/off)
+            }
+            // });
+            if (checkbox1.checked) {
+                checkbox2.checked = true;   // the armed checkbox remains checked
+            } else {
+                checkbox2.checked = false;  // disarm this alarm after a single activation
+            }
+            // the state of checkbox2 shall be saved by setItem
+            localStorage.setItem(schoolid + "Checkbox2-" + TodaybellArray[arrowindex][4], checkbox2.checked);
+        }
+    }
+    
+    /*
+    // The following section uses Web Audio API
+    const audioContext = new AudioContext();
+    const alarmBufferPromises = {
+        default: fetch('audiovideo/beep-beep-6151.mp3')
+            .then(response => response.arrayBuffer())
+            .then(buffer => audioContext.decodeAudioData(buffer))
+            .catch(error => console.error('Error loading default audio file:', error)),
+        chromebook: fetch('audiovideo/beep-beep-Mod18.mp3')
+            .then(response => response.arrayBuffer())
+            .then(buffer => audioContext.decodeAudioData(buffer))
+            .catch(error => console.error('Error loading Chromebook audio file:', error)),
+    };
+
+    const playAlarmSound = async (type = 'default') => {
+        const alarmBufferPromise = alarmBufferPromises[type];
+        const alarmBuffer = await alarmBufferPromise;
+        const source = audioContext.createBufferSource();
+        source.buffer = alarmBuffer;
+        source.connect(audioContext.destination);
+        source.start(0);
+    };
+
+    // Thus arrowindex has to be within school hours, namely 1 to less than 10
+    // arrowindex may not be contiguous because of passing periods
+    // arrowindex = 1 means time now is before the end of the 1st period
+    if (arrowindex != 99){
+        // Sound Effect from Pixabay
+        // console.log("arrowindex = " + arrowindex);
+        var alarmstringid = schoolid + "Minutestobell-" + TodaybellArray[arrowindex][4];
+        var alarmminutes = localStorage.getItem(alarmstringid);
+        var alarmcomposite = 60 * alarmminutes;   // converted into seconds 
+        // reusing the checkbox 1 and 2 variables
+        // console.log("alarmcomposite = " + alarmcomposite + " and " + "deltacomposite = " + deltacomposite);
+        checkbox1 = document.getElementById(schoolid + "Checkbox1-" + TodaybellArray[arrowindex][4]); // temp name for that repeat box
+        checkbox2 = document.getElementById(schoolid + "Checkbox2-" + TodaybellArray[arrowindex][4]); // temp name for that armed box
+        var debugString = "debug: alarm = " + alarmcomposite + " and " + "delta = " + deltacomposite + " armed = " + checkbox2.checked + " CrOS agent = " + navigator.userAgent.indexOf("CrOS");
+        var debugElement = document.getElementById("debugonly");
+        debugElement.textContent = debugString;
+
+        if (deltacomposite == alarmcomposite && checkbox2.checked) {
+            if (navigator.userAgent.indexOf("CrOS") !== -1) {
+                playAlarmSound('chromebook');
+            } else {
+                playAlarmSound('default');
+            }
+            // trigger the buzz vibration (if supported by the device)
+            if (navigator.vibrate) {
+                navigator.vibrate([200, 100, 200]); // vibration pattern (ms on/off)
+            }
+            if (checkbox1.checked) {
+                checkbox2.checked = true;   // the armed checkbox remains checked
+            } else {
+                checkbox2.checked = false;  // disarm this alarm after a single activation
+            }
+            // the state of checkbox2 shall be saved by setItem
+            localStorage.setItem(schoolid + "Checkbox2-" + TodaybellArray[arrowindex][4], checkbox2.checked);
+        }
+    }
+    */
 }

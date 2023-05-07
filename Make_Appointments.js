@@ -118,18 +118,20 @@ function PrintWeeklyTable(weeknum){
 
     var table = document.createElement("TABLE");
     table.border = "1";
+    table.style.borderCollapse = "collapse";
     var columnCount = weekrows[0].length;
 
     var row = table.insertRow(-1);
     for (i = 0; i < columnCount; i++) {
         var headerCell = document.createElement("TH");
         headerCell.innerHTML = weekrows[0][i];
+        headerCell.classList.add('header-clearall');
         row.appendChild(headerCell);
     }    
 
-    for (i = 1; i < weekrows.length; i++) {
+    for (i = 1; i < weekrows.length; i++) { // should have rows 1 to 8
         row = table.insertRow(-1);
-        for (var j = 0; j < columnCount; j++) {
+        for (var j = 0; j < columnCount; j++) { // should have columns 0 to 5
             var cell = row.insertCell(-1);
             cell.innerHTML = weekrows[i][j];
             if (i > 3 && i < 7){
@@ -138,6 +140,13 @@ function PrintWeeklyTable(weeknum){
                 cell.style.paddingLeft = '15px';
             }
             // if (j === 3){cell.classList.add('red-column');}
+            /*
+            if (j == 0) {
+                if (i == 1 || i == 2 || i == 3 || i==7 || i == 8) {
+                    cell.classList.add('cell-cleartopbottom');
+                }
+            }
+            */
         }
     }
     
@@ -145,7 +154,7 @@ function PrintWeeklyTable(weeknum){
     
     if (weeklyshortarray[0][0] != 90){  // print day schedule only if this is a school day
     var button1 = document.createElement("button");
-    button1.innerHTML = "Show <br> All <br> Schedules";
+    button1.innerHTML = "Show <br> Schedules <br> below";
     button1.addEventListener("click", function() {
         weekdayselected = 1;
         PrintXschedule(firstdayweeknum + weekdayselected);
@@ -157,7 +166,7 @@ function PrintWeeklyTable(weeknum){
     
     if (weeklyshortarray[1][0] != 90){
     var button2 = document.createElement("button");
-    button2.innerHTML = "Show <br> All <br> Schedules";
+    button2.innerHTML = "Show <br> Schedules <br> below";
     button2.addEventListener("click", function() {
         weekdayselected = 2;
         PrintXschedule(firstdayweeknum + weekdayselected);
@@ -169,7 +178,7 @@ function PrintWeeklyTable(weeknum){
     
     if (weeklyshortarray[2][0] != 90){
     var button3 = document.createElement("button");
-    button3.innerHTML = "Show <br> All <br> Schedules";
+    button3.innerHTML = "Show <br> Schedules <br> below";
     button3.addEventListener("click", function() {
         weekdayselected = 3;
         PrintXschedule(firstdayweeknum + weekdayselected);
@@ -181,7 +190,7 @@ function PrintWeeklyTable(weeknum){
     
     if (weeklyshortarray[3][0] != 90){
     var button4 = document.createElement("button");
-    button4.innerHTML = "Show <br> All <br> Schedules";
+    button4.innerHTML = "Show <br> Schedules <br> below";
     button4.addEventListener("click", function() {
         weekdayselected = 4;
         PrintXschedule(firstdayweeknum + weekdayselected);
@@ -193,7 +202,7 @@ function PrintWeeklyTable(weeknum){
     
     if (weeklyshortarray[4][0] != 90){
     var button5 = document.createElement("button");
-    button5.innerHTML = "Show <br> All <br> Schedules";
+    button5.innerHTML = "Show <br> Schedules <br> below";
     button5.addEventListener("click", function() {
         weekdayselected = 5;
         PrintXschedule(firstdayweeknum + weekdayselected);
@@ -313,19 +322,66 @@ function PrintXschedule(Xdayindex) {
     schedulex.appendChild(table);
 }
 
-function Do_apptform(ContainerElementID){
+function Do_apptform(ContainerElementID){   // primary Container is "offsetweek"
     var ContainerElement = document.getElementById(ContainerElementID);
-    var itemPar = makeheadingPar("Click up/down arrows to see future weeks");
-    ContainerElement.appendChild(itemPar);
+
+    // create the QR code container and label
+    var qrCodeContainer = document.createElement("div");
+    qrCodeContainer.className = "qr-code-container";
+    qrCodeContainer.style.marginLeft = "50px";  // add margin-left style
+    qrCodeContainer.style.position = "relative"; // set position to relative
+    var qrCodeImage = document.createElement("img");
+    qrCodeImage.src = "images/QRcounteverybell.png";
+    qrCodeImage.alt = "QR Code";
+    qrCodeImage.style.marginTop = "130px";  // set margin-top style
+    qrCodeContainer.appendChild(qrCodeImage);
     
-    var inlinePar = document.createElement("p");
-    itemPar = makeInputElementWithButtons("weeknumoffset");
-    inlinePar.appendChild(itemPar);
-    // inlinePar.appendChild (document.createTextNode (" ")); 
-    itemPar = makeinlineElement("Display the current week", "deleteweekoffset", "deleteweek_onclick()")
-    inlinePar.appendChild(itemPar);
-    
-    ContainerElement.appendChild(inlinePar);
+    var qrCodeLabel = document.createElement("p");
+    qrCodeLabel.className = "qr-code-label";
+    qrCodeLabel.innerText = "Parents: please share with other parents. www.counteverybell.com";
+    qrCodeContainer.appendChild(qrCodeLabel);
+
+    // set position of the label
+    qrCodeLabel.style.position = "absolute";
+    // qrCodeLabel.style.top = "-55px";
+    qrCodeLabel.style.left = (qrCodeImage.offsetLeft + 10) + "px" ; // set left margin equal to the left position of the image
+
+    // create the input element with buttons
+    var inputContainer = document.createElement("div");
+    inputContainer.className = "input-container";
+    inputContainer.style.marginLeft = "50px";  // add margin-left style
+    inputContainer.style.position = "relative"; // set position to relative
+    inputContainer.style.top = "-30px"; // move the container upwards by 20px
+
+    var displayButton = document.createElement("button");
+    displayButton.innerHTML = "Show the <br> Current Week";
+    displayButton.className = "text5";
+    displayButton.addEventListener("click", function() {
+        var div = document.getElementById("Xdayschedule");
+        if (div) {
+        div.innerHTML = "";
+        }
+        weekdayselected = 99;    // reset weekdayselected to be out of range
+        
+        document.getElementById("weeknumoffset").value = 0;
+        weeknumselected = todayweeknum;
+        PrintWeeklyTable(weeknumselected);    
+    });
+    displayButton.style.marginTop = "20px";
+    displayButton.style.marginBottom = "30px";
+    displayButton.style.marginLeft = "20px";
+    inputContainer.appendChild(displayButton);
+
+    var inputElement = makeInputElementWithButtons("weeknumoffset", "See a Future Week");
+    inputContainer.appendChild(inputElement);
+
+    // set display property of containers to inline-block
+    qrCodeContainer.style.display = "inline-block";
+    inputContainer.style.display = "inline-block";
+    inputContainer.style.marginBottom = "0px";
+
+    ContainerElement.appendChild(qrCodeContainer);
+    ContainerElement.appendChild(inputContainer);
 }
 
 function makeheadingPar(valueText){
@@ -349,18 +405,29 @@ function makeInputElement(nameText) {
     return inputElement;
 }
 
-function makeInputElementWithButtons(nameText) {
+function makeInputElementWithButtons(nameText, labelText) {
+    // only apply to weeknumoffset and See a Future Week divisions
     let container = document.createElement("div");
+    
+    // create the label for input element
+    let labelElement = document.createElement("label");
+    labelElement.innerText = labelText;
+    labelElement.className = "weeklabel";
+    labelElement.setAttribute("for", labelText);
+    // labelElement.style.fontFamily = "'Open Sans', sans-serif"; // set font family
+    labelElement.style.display = "block"; // add this line to make the label a block-level element
   
+    container.appendChild(labelElement);
+
     // create the input element
     let inputElement = document.createElement("input");
     inputElement.setAttribute("value", 0);
     inputElement.setAttribute("min", -19);
     inputElement.setAttribute("max", 19);
-    inputElement.setAttribute("size", 5);
-    inputElement.setAttribute("maxlength", 5);
+    inputElement.setAttribute("size", 3); // decrease width
+    inputElement.setAttribute("maxlength", 2); // decrease maximum length
     inputElement.setAttribute("type", "number");
-    inputElement.className = "menuinput";
+    inputElement.className = "weekinput";
     inputElement.setAttribute("id", nameText);
     inputElement.setAttribute("name", nameText);
     container.appendChild(inputElement);
@@ -378,8 +445,8 @@ function makeInputElementWithButtons(nameText) {
     container.appendChild(upArrowButton);
   
     return container;
-  }
-  
+}
+
 
 function Specifyweekoffsetrange(){
     // todayweeknum may change if in admin mode the time offset is set to nonzero
