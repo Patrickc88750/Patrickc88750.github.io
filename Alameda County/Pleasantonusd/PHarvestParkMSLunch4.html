@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title id="ctitle">Timer</title>
+    
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="57x57" href="apple-touch-icon-57x57.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="apple-touch-icon-114x114.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="apple-touch-icon-72x72.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="apple-touch-icon-144x144.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="60x60" href="apple-touch-icon-60x60.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="120x120" href="apple-touch-icon-120x120.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="76x76" href="apple-touch-icon-76x76.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="apple-touch-icon-152x152.png" />
+    <link rel="icon" type="image/png" href="favicon-196x196.png" sizes="196x196" />
+    <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16" />
+    <link rel="icon" type="image/png" href="favicon-128.png" sizes="128x128" />
+    <meta name="application-name" content="&nbsp;"/>
+    <meta name="msapplication-TileColor" content="#FFFFFF" />
+    <meta name="msapplication-TileImage" content="mstile-144x144.png" />
+    <meta name="msapplication-square70x70logo" content="mstile-70x70.png" />
+    <meta name="msapplication-square150x150logo" content="mstile-150x150.png" />
+    <meta name="msapplication-wide310x150logo" content="mstile-310x150.png" />
+    <meta name="msapplication-square310x310logo" content="mstile-310x310.png" />
+    
+    <link rel="stylesheet" href="Timer_style.css?v=12344">
+    <script src="PHarvestParkMSLunch4_Makebell.js"></script>
+    <!-- the schoolid variable will be declared with this filename -->
+</head>
+
+<body onload="doStartClock()">
+
+    <div class="container1">
+        <div class="image1" id="leftfield"></div>
+        <div class="text1" id="rightfield"></div>
+    </div>
+
+    <div class="text2">
+        <p id="timePar"></p>
+    </div>
+
+    <div class="text3">
+        <p id="whatsitfor"></p>
+    </div>
+    
+    <div id="scrollbuttonsection"></div>
+
+    <div class="text4">
+        <p id="alertmessage"></p>
+    </div>
+    
+    <div class="text4">
+        <p id="tobreak">Days left to a break</p>
+    </div>
+    
+    <div class="text4">
+        <p id="toendofQ">Days left to end of a quarter</p>
+    </div>
+
+    <canvas id="clock"></canvas>
+    
+    <div id="dvTableContainer" class="text5">
+        <table id="dvTable">
+            <thead>
+                <tr>
+                  <th>Column 1</th>
+                  <th>Column 2</th>
+                  <th>Column 3</th>
+                  <th>Column 4</th>
+                </tr>
+              </thead>
+              <tbody>
+
+              </tbody><!-- table content goes here -->
+        </table>
+    </div>
+    
+    <p id="debugonly"><span style='color:white;'>debug only</span></p>
+
+    <h2 id="making-appointments" class="text4">Making Plans and Appointments</h2>
+
+    <p id="clocktickindicator" class="text4">-</p>
+
+    <div name="form2" id="offsetweek"></div>
+    
+    <div id="WeeklyTableContainer" class="text5">
+        <table id="WeeklyTable">
+            <thead>
+                <tr>
+                    <th>Column 1</th>
+                    <th>Column 2</th>
+                    <th>Column 3</th>
+                    <th>Column 4</th>
+                    <th>Column 5</th>
+                    <th>Column 6</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- table content goes here -->
+            </tbody>
+        </table>
+    </div>
+    
+    <div id="Xdayschedule" class="text5"></div>
+
+    <div name="form1" id="offsetinputs"></div>  
+    
+    <h3>Resources:</h3>
+
+    <div id="resourcefield"></div>
+    
+    <p>Disclaimer: This website is not responsible for any consequences 
+        such as absence, tardiness, or missing homeworks due to
+        incorrect information being read on this webpage. Users 
+        should exercise judgement and check for correctness 
+        of schedules and dates on the school official websites. Students 
+        should also use judgement when activating the alarms in this
+        program inside a classroom.</p>
+    <p>Privacy Policy: This website does <span style="font-weight: bold;">not</span> collect or transmit any user's personal data, information or cookies.</p>
+    <p>Inquiry: <a href="mailto:pcheung@cv.k12.ca.us" style="color: blue; text-decoration: underline;">pcheung@cv.k12.ca.us</a></p>
+
+    
+    <div class="text5">
+        <p id="Matchstatus"></p>
+    </div>
+    <div id="Schedule_A" class="text5"></div>
+    <div id="Schedule_B" class="text5"></div> 
+    <div id="Schedule_C" class="text5"></div> 
+    <div id="Schedule_D" class="text5"></div> 
+    <div id="Schedule_E" class="text5"></div> 
+    <div id="Schedule_F" class="text5"></div> 
+    <div id="Schedule_G" class="text5"></div> 
+    <div id="Schedule_H" class="text5"></div> 
+    <div id="Schedule_I" class="text5"></div> 
+    <div id="Schedule_J" class="text5"></div> 
+    <div id="Schedule_K" class="text5"></div> 
+    <div id="Schedule_L" class="text5"></div> 
+    <div id="Schedule_M" class="text5"></div> 
+    <div id="Schedule_N" class="text5"></div> 
+    <div id="Schedule_O" class="text5"></div> 
+    <div id="Schedule_P" class="text5"></div> 
+    <div id="Schedule_Q" class="text5"></div> 
+    <div id="Schedule_R" class="text5"></div> 
+    <div id="Schedule_S" class="text5"></div> 
+    <div id="Schedule_T" class="text5"></div> 
+    <div id="Schedule_U" class="text5"></div> 
+    <div id="Schedule_V" class="text5"></div> 
+    <div id="Schedule_W" class="text5"></div> 
+    <div id="Schedule_X" class="text5"></div> 
+    <div id="Schedule_Y" class="text5"></div> 
+    <div id="YearCalendar" class="text5"></div>
+
+    <script>
+        var scriptversion = '12344';    // Apr 23 2023
+    </script>
+    <script src="All_Functions.js?v={{scriptversion}}"></script>
+    
+    <script type="text/javascript">
+    
+// Javascript program designed and written by Patrick Cheung
+// Dec 7th, 2022, in Castro Valley, CA
+// Any questions please email pcheung@cv.k12.ca.us
+//       document.body.style.backgroundImage = "url('./images/timer_background4.jpg')";
+
+    adminmode = 0;        
+    // Get the full URL of the current page
+    var url = window.location.href;
+
+    // Extract the file name
+    var thishtmlfilename = url.substring(url.lastIndexOf("/") + 1, url.lastIndexOf("."));
+
+    // Initialize the variable with the extracted filename
+    var schoolid = thishtmlfilename;
+
+    // Log the value for testing purposes
+    // console.log(schoolid);
+        
+        
+        
+        
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,14 @@
+{
+    // launch.json provided by chatGPT
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "pwa-chrome",
+            "request": "launch",
+            "name": "Launch Active HTML File",
+            "file": "${file}",  // This opens the currently active file in the editor
+            "webRoot": "${workspaceFolder}",
+            "sourceMaps": false
+        }
+    ]
+}
