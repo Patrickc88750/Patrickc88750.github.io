@@ -1,5 +1,0 @@
-CVCVHS_admin.html
-CVCanyon6_admin.html
-CVCanyon7_admin.html
-CVCVE45_admin.html
-CVChabot45_admin.html
